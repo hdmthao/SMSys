@@ -1,10 +1,9 @@
 #include "app.h"
 
 
-
 App::App() :
 	user(nullptr) {
-	user = new user();
+	user = new User();
 }
 
 
@@ -28,4 +27,10 @@ bool App::Logout() {
 	logoutStatus = user->Logout();
 
 	return logoutStatus;
+}
+
+
+// Cai nay chi de test, sau nay se xoa
+void App::CreateAccount(const int &id, const string &userName, const string &passWord, const UserRole &role) {
+	user->CreateAccount(id, userName, passWord, role);
 }

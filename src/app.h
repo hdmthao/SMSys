@@ -18,7 +18,11 @@ public:
 	~App();
 
 	bool Login(string userName, string passWord);
+	bool Logout();
 
+
+	// cai nay chi de test, sau nay se xoa
+	void CreateAccount(const int &id, const string &userName, const string &passWord, const UserRole &role);
 };
 
 #endif

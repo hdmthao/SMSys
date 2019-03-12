@@ -7,6 +7,8 @@ using std::cin;
 using std::cout;
 using std::string;
 
+App* app = new App();
+
 string getString(string msg) {
 	string x;
 	cout << msg << " :";
@@ -21,11 +23,34 @@ int getInt(string msg) {
 	return x;
 }
 
+void TestCreateAccount(int n) {
+	int id = 18125130;
+	string userName = "";
+	string passWord = "";
+
+	while (n > 0) {
+		n--;
+		id++;
+		userName = getString("UserName");
+		passWord = getString("password");
+		app->CreateAccount(id, userName, passWord, UserRole::Student);	
+	}
+}
+
+void TestLogin() {
+	string userName = getString("Ten Dang nhap");
+	string password = getString("matkhau");
+
+	if (app->Login(userName, password)) {
+		cout << "Login OK";
+	} else {
+		cout << "Login Fail";
+	}
+
+}
+
 int main() {
 	
-	system(clear);
-
-	string userName = getString("UserName");
-	string passWord = getString("Password");
-
+	// TestCreateAccount(2);
+	//TestLogin();
 }
