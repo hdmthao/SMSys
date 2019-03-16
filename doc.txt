@@ -1,0 +1,18 @@
+
+Tạo 1 instance của App : App* app = new App();
+
+Login:
+    +Gọi hàm:           app->Login(string user_name, string password)
+    @Kết quả trả về : - True nếu Login OK 
+                      - Flase nếu Login FAIL
+
+Import Class (Feature 6 of Staff): 
+    // Import file csv từ data/import/student/
+    // Hien ra 1 list cac file co the import -> user chon 1 file -> import
+    
+    +Gọi hàm:   app->GetImportFile();
+    @Kết quả trả về 1 vector<string> các file hiện có trong thư mục data/import/student/
+
+    +Gọi hàm:   app->ImportClass(string class_name, string csv_name);
+    @Kết quả tả về: - True nếu import OK
+                    - False nếu import FAIL
