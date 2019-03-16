@@ -22,8 +22,7 @@ public:
 	bool Login(const string &userName, const string &passWord);
 	bool Logout();
 	bool FirstTimeLogin(void);
-	void CreateAccount(const int &id, const string &userName, const string &password, const UserRole &role);
-	bool ResetPassword(const int &id, const string &oldPassword, const string &newPassword);
+	bool ResetPassword(const string &oldPassword, const string &newPassword);
 	void DeleteAccount(const int &id);
 };
 

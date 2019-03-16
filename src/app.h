@@ -2,6 +2,8 @@
 #define APP_H
 
 #include "user.h"
+#include "staff.h"
+
 #include <string>
 
 using std::string;
@@ -11,18 +13,19 @@ using std::string;
 class App {
 private:
 	User* user;
-
+	Staff* staff;
 
 public:
 	App();
 	~App();
 
+	// All User
 	bool Login(string userName, string passWord);
 	bool Logout();
 
+	//Staff
+	bool ImportClass(const string &class_name, const string &csv_name);
 
-	// cai nay chi de test, sau nay se xoa
-	void CreateAccount(const int &id, const string &userName, const string &passWord, const UserRole &role);
 };
 
 #endif

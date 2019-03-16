@@ -1,4 +1,5 @@
 #include "app.h"
+
 #include <iostream>
 #include <string>
 
@@ -23,19 +24,6 @@ int getInt(string msg) {
 	return x;
 }
 
-void TestCreateAccount(int n) {
-	int id = 18125130;
-	string userName = "";
-	string passWord = "";
-
-	while (n > 0) {
-		n--;
-		id++;
-		userName = getString("UserName");
-		passWord = getString("password");
-		app->CreateAccount(id, userName, passWord, UserRole::Student);	
-	}
-}
 
 void TestLogin() {
 	string userName = getString("Ten Dang nhap");
@@ -49,8 +37,16 @@ void TestLogin() {
 
 }
 
+void TestImportClass() {
+	string new_class_name = getString("Ten lop moi");
+	string csv_name = "18CTT2-Students.csv";
+
+	app->ImportClass(new_class_name, csv_name);
+}
+
 int main() {
 	
-	// TestCreateAccount(2);
-	//TestLogin();
+//	TestCreateAccount(2);
+//	TestLogin();
+	TestImportClass();
 }

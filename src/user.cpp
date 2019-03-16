@@ -1,5 +1,6 @@
 ﻿#include "user.h"
 #include "generator.h"
+#include "path.h"
 
 #include <fstream>
 #include <vector>
@@ -25,7 +26,7 @@ bool User::Login(const string &userName, const string &passWord) {
 	int cur_role;
 	ifstream in;
 
-	in.open("data/account/account.txt");
+	in.open(Path::ACCOUNT);
 
 	while (in >> cur_acc.ID >> cur_acc.username >> cur_acc.password >> cur_role >> cur_acc.firstTimeLogin) {
 		if (userName == cur_acc.username && Generator::generatePassword(passWord) == cur_acc.password) {
@@ -49,10 +50,10 @@ bool User::Login(const string &userName, const string &passWord) {
 
 
 bool User::Logout() {
-	if (!isAuthenticated) return false;
+	if (!this->isAuthenticated) return false;
 
 	delete account;
-	isAuthenticated = false;
+	this->isAuthenticated = false;
 	
 	return true;
 
@@ -60,31 +61,21 @@ bool User::Logout() {
 
 
 bool User::FirstTimeLogin(void){
-	return account->firstTimeLogin;
+	return this->account->firstTimeLogin;
 }
 
 
-void User::CreateAccount(const int &id, const string &userName, const string &password, const UserRole &role){
-	ofstream out;
-	out.open("data/account/account.txt", ios::app);
-
-	out << id << " " << userName << " " << Generator::generatePassword(password) << " " << role << " " << 1 << "\n"; // firsttime is true
-
-	out.close();
-}
-
-
-bool User::ResetPassword(const int &id, const string &oldPassword, const string &newPassword){
+bool User::ResetPassword(const string &oldPassword, const string &newPassword){
 	vector <Account> ListAcc;
 	Account cur_acc;
 	int cur_role;
 	bool resetStatus = false;
 
 	ifstream in;
-	in.open("data/account/account.txt");
+	in.open(Path::ACCOUNT);
 	
 	while (in >> cur_acc.ID >> cur_acc.username >> cur_acc.password >> cur_role >> cur_acc.firstTimeLogin) {
-		if (id == cur_acc.ID && cur_acc.password == Generator::generatePassword(oldPassword)) {
+		if (this->account->ID == cur_acc.ID && cur_acc.password == Generator::generatePassword(oldPassword)) {
 			cur_acc.password = Generator::generatePassword(newPassword);
 			resetStatus = true;
 		}
@@ -99,7 +90,7 @@ bool User::ResetPassword(const int &id, const string &oldPassword, const string 
 	}
 
 	ofstream out;
-	out.open("data/account/account.txt");
+	out.open(Path::ACCOUNT);
 
 	while (!ListAcc.empty()) {
 		out << ListAcc.back().ID << " " << ListAcc.back().username << " " << ListAcc.back().password << " " << ListAcc.back().role << " " << ListAcc.back().firstTimeLogin << "\n";
@@ -111,13 +102,14 @@ bool User::ResetPassword(const int &id, const string &oldPassword, const string 
 	return true;
 }
 
+
 void User::DeleteAccount(const int &id){
 	vector <Account> ListAcc;
 	Account cur_acc;
 	int cur_role;
 
 	ifstream in;
-	in.open("data/account/account.txt");
+	in.open(Path::ACCOUNT);
 
 	while (in >> cur_acc.ID >> cur_acc.username >> cur_acc.password >> cur_role >> cur_acc.firstTimeLogin) {
 		if (id == cur_acc.ID)
@@ -129,7 +121,7 @@ void User::DeleteAccount(const int &id){
 	in.close();
 
 	ofstream out;
-	out.open("data/account/account.txt");
+	out.open(Path::ACCOUNT);
 
 	while (!ListAcc.empty()) {
 		out << ListAcc.back().ID << " " << ListAcc.back().username << " " << ListAcc.back().password << " " << ListAcc.back().role << " " << ListAcc.back().firstTimeLogin << "\n";
@@ -141,16 +133,17 @@ void User::DeleteAccount(const int &id){
 	return;
 }
 
+
 UserRole User::FormatIntToRole(int role){
 	switch (role) {
-	case UserRole::Lecturer:
-		return UserRole::Lecturer;
+	case UserRole::LECTURER:
+		return UserRole::LECTURER;
 
-	case UserRole::Staff:
-		return UserRole::Staff;
+	case UserRole::STAFF:
+		return UserRole::STAFF;
 
-	case UserRole::Student:
-		return UserRole::Student;
+	case UserRole::STUDENT:
+		return UserRole::STUDENT;
 
 	default:
 		break;

@@ -12,25 +12,32 @@ App::~App() {
 }
 
 
-bool App::Login(string userName, string passWord) {
-	bool loginStatus = false;
+bool App::Login(string user_name, string password) {
+	bool login_status = false;
 
-	loginStatus = user->Login(userName, passWord);
+	login_status = user->Login(user_name, password);
 
-	return loginStatus;
+	// check role de cap phat instance
+	staff = new Staff();
+
+	return login_status;
 }
 
 
 bool App::Logout() {
-	bool logoutStatus = false;
+	bool logout_status = false;
 
-	logoutStatus = user->Logout();
+	logout_status = user->Logout();
 
-	return logoutStatus;
+	delete staff;
+	return logout_status;
 }
 
 
-// Cai nay chi de test, sau nay se xoa
-void App::CreateAccount(const int &id, const string &userName, const string &passWord, const UserRole &role) {
-	user->CreateAccount(id, userName, passWord, role);
+bool App::ImportClass(const string &class_name, const string &csv_name) {
+	bool import_status = false;
+
+	import_status = staff->ImportClass(class_name, csv_name);
+
+	return import_status;
 }

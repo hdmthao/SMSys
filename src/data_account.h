@@ -6,9 +6,9 @@
 using std::string;
 
 enum UserRole {
-	Staff = 10,
-	Lecturer,
-	Student
+	STAFF = 10,
+	LECTURER,
+	STUDENT
 };
 
 struct Account {

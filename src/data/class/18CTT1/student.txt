@@ -1,0 +1,10 @@
+18125004 Dat Le-Ton-Thanh Male 2/3/2000 lttdat18@apcs.vn
+18125073 Di Huynh-Bao Male 3/5/2000 hbdi18@apcs.vn
+18125086 Khang Nguyen-Huu Male 25/10/2000 nhkhang18@apcs.vn
+18125104 Nhi Ly-Ngoc Female 16/6/2000 lnnhi18@apcs.vn
+18125123 Anh Ho-Thi-Phuong Female 5/1/2000 htpanh18@apcs.vn
+18125138 Tan Huynh-Nhat Male 18/5/2000 hntan18@apcs.vn
+18125140 Minh Le-Ngoc Male 2/1/2000 lnminh18@apcs.vn
+18125141 Nam Dang-Phuong Male 24/8/2000 dpnam18@apcs.vn
+18125142 Ninh Nguyen-Dao-Gia Male 30/5/1999 ndgninh18@apcs.vn
+18125144 Tri Le-Huynh-Minh Male 22/1/2000 lhmtri18@apcs.vn
