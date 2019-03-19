@@ -5,24 +5,28 @@
 
 #include <fstream>
 #include <iostream>
-#include <vector>
 #include <set>
+#include <vector>
 
 using std::ios;
 using std::vector;
+using std::pair;
 using std::ofstream;
 using std::ifstream;
 using std::getline;
 using std::set;
 using std::cout;
 
+
 Staff::Staff() {
 
 }
 
+
 Staff::~Staff() {
 
 }
+
 
 bool Staff::ImportClass(const string &class_name, const string &csv_name) {
     string new_class_name = Helper::StringToUpper(class_name);
@@ -39,7 +43,7 @@ bool Staff::ImportClass(const string &class_name, const string &csv_name) {
     // get student existed in class to check existed student
     set<int> ID_list;
     
-    ifstream fi(Path::STUDENTS);
+    ifstream fi(Path::ALL_STUDENT);
 
     if (fi.is_open()) {
         int id;
@@ -54,7 +58,7 @@ bool Staff::ImportClass(const string &class_name, const string &csv_name) {
     fi.open(path_to_csv);
     if (fi.is_open()) {
         ofstream fo_class_student(path_to_class, ios::app);
-        ofstream fo_all_student(Path::STUDENTS, ios::app);
+        ofstream fo_all_student(Path::ALL_STUDENT, ios::app);
         ofstream fo_account(Path::ACCOUNT, ios::app);
         string no, id;
         Student student;
@@ -78,15 +82,16 @@ bool Staff::ImportClass(const string &class_name, const string &csv_name) {
             if (is_existed_id == false) {
                 student.email = Generator::generateEmail(student.last_name, student.first_name);
 
+                
                 // add student to student list of class and list of all student
                 CreateStudent(fo_class_student, fo_all_student, student, new_class_name);
 
                 // Create Account -- username : ID -- password defaul : ID
                 CreateAccount(fo_account, student.ID, id, id, UserRole::STUDENT);
 
-                cout << "Them ID " << student.ID << " ok\n";
+                cout << ">> Add ID " << student.ID << " OK\n";
             } else {
-                cout << "ID " << student.ID << " da ton tai\n";
+                cout << ">> ID " << student.ID << " Existed\n";
             }
         }
         fo_class_student.close();
@@ -98,6 +103,198 @@ bool Staff::ImportClass(const string &class_name, const string &csv_name) {
     
     fi.close();
 }
+
+
+bool Staff::AddNewStudent(const string &class_name, Student &new_student) {
+    string new_class_name = Helper::StringToUpper(class_name);
+    string path_to_class = Path::CLASS + new_class_name + "/student.txt";
+
+    // get student existed in class to check existed student
+    set<int> ID_list;
+    
+    ifstream fi(Path::ALL_STUDENT);
+
+    if (fi.is_open()) {
+        int id;
+        string class_name;
+        bool is_existed = false;
+        while (fi >> id && fi >> class_name) {
+            if (id == new_student.ID) {
+                is_existed = true;
+                break;
+            }
+        }
+        if (is_existed) {
+            cout << ">> ID " << new_student.ID << " Existed.\n";
+            return false;
+        }
+    }
+    fi.close();
+
+    ofstream fo_class_student(path_to_class, ios::app);
+    ofstream fo_all_student(Path::ALL_STUDENT, ios::app);
+    ofstream fo_account(Path::ACCOUNT, ios::app);
+    
+    new_student.email = Generator::generateEmail(new_student.last_name, new_student.first_name);
+
+    CreateStudent(fo_class_student, fo_all_student, new_student, new_class_name);
+    
+    string id = std::to_string(new_student.ID); // convert int to string
+    CreateAccount(fo_account, new_student.ID, id, id, UserRole::STUDENT);
+
+    fo_class_student.close();
+    fo_all_student.close();
+    fo_account.close();
+
+    cout << ">> Add ID " << new_student.ID << " OK\n";
+    return true;
+}
+
+
+bool Staff::ChangeStudentFromClassAToB(const int &id, string &class_b) {
+    const string class_a = FindClassWithID(id);
+    class_b = Helper::StringToUpper(class_b);
+
+    if (class_a == "" || class_b == "") return false; // ko ton tai 2 lon nay
+
+    // change class_a in  file all student to class_b
+    vector<pair<int, string>> vec;
+    
+    ifstream fi_all_student(Path::ALL_STUDENT);
+
+    int ID;
+    string class_name;
+
+    while (fi_all_student >> ID >> class_name) {
+        if (ID == id) class_name = class_b;
+        cout << ID << " " << class_name << "\n";
+        vec.push_back(std::make_pair(ID, class_name));
+    }
+    fi_all_student.close();
+
+    // ghi lai vo file all student 
+    ofstream fo_all_student(Path::ALL_STUDENT);
+
+    while (!vec.empty()) {
+        fo_all_student << vec.back().first << " " << vec.back().second << "\n";
+        vec.pop_back();
+    }
+
+    fo_all_student.close();
+
+
+    cout << class_a << " " << class_b << "\n";
+}
+
+
+bool Staff::RemoveStudent(const int &ID){
+	int done = 0;
+	vector <Student> studentList;
+	Student tmp_student;
+
+    // Remove from data/class/ / student.txt	
+	const string class_name = FindClassWithID(ID);
+	string tmp_path = Path::CLASS + class_name + "/student.txt";
+
+	// Get_data and Delete
+	ifstream in(tmp_path);
+	while (in >> tmp_student.ID >> tmp_student.first_name >> tmp_student.last_name >>
+             tmp_student.gender >> tmp_student.dob >> tmp_student.email) {
+		studentList.push_back(tmp_student);
+		if (studentList.back().ID == ID) {
+			studentList.pop_back();
+			++done;
+		}
+	}
+	in.close();
+
+	// Rewrite data
+	ofstream out;
+	out.open(tmp_path);
+	for (int i = 0; i < studentList.size(); i++) {
+		out << studentList[i].ID << " " << studentList[i].first_name << " " << studentList[i].last_name << " " << studentList[i].gender << " " << studentList[i].dob << " " << studentList[i].email << "\n";
+	}
+	studentList.clear();
+	out.close();
+    // Remove from data/student/student.txt
+	//Get data and Delete
+	tmp_path = Path::ALL_STUDENT;
+	in.open(tmp_path);
+	while (in >> tmp_student.ID >> tmp_student.class_name) {
+		studentList.push_back(tmp_student);
+		if (tmp_student.ID == ID && tmp_student.class_name == class_name) {
+			studentList.pop_back();
+			++done;
+		}
+	}
+	in.close();
+	// Rewrite Data 
+	out.open(tmp_path);
+	for (int i = 0; i < studentList.size(); i++) {
+		out << studentList[i].ID << " " << studentList[i].class_name << "\n";
+	}
+	studentList.clear();
+	out.close();
+
+    DeleteAccount(ID);
+
+	return done == 2; // delete from 2 file
+}
+
+
+bool Staff::EditStudent(Student &student){
+	bool done = false;
+    Helper::NormalizeStudent(student);
+    Helper::ConvertLastNameToDash(student.last_name);
+
+    const string class_name = FindClassWithID(student.ID);
+    if (class_name == "") return false;
+	string tmp_path = Path::CLASS + class_name + "/student.txt";
+	vector <Student> studentList;
+	// Get_data and Edit
+	ifstream in;
+	in.open(tmp_path);
+	Student tmp_student;
+	while (in >> tmp_student.ID >> tmp_student.first_name >> tmp_student.last_name >>
+             tmp_student.gender >> tmp_student.dob >> tmp_student.email) {
+		studentList.push_back(tmp_student);
+		if (studentList.back().ID == student.ID) {
+			studentList.back() = student;
+			done = true;
+		}
+	}
+	in.close();
+
+    if (!done) return false;
+	// Rewrite data
+	ofstream out;
+	out.open(tmp_path);
+	for (int i = 0; i < studentList.size(); i++) {
+		out << studentList[i].ID << " " << studentList[i].first_name << " " << studentList[i].last_name << " " << studentList[i].gender << " " << studentList[i].dob << " " << studentList[i].email << "\n";
+	}
+	studentList.clear();
+	out.close();
+	return true;
+}
+
+
+Student Staff::GetStudent(const int &ID) {
+    const string class_name = FindClassWithID(ID);
+
+    const string tmp_path = Path::CLASS + class_name + "/student.txt";
+
+    ifstream fi(tmp_path);
+    Student student;
+
+    while (fi >> student.ID >> student.first_name >> student.last_name >>
+            student.gender >> student.dob >> student.email) {
+                if (student.ID == ID) {
+                    fi.close();
+                    return student;
+                }
+            }
+}
+
 
 bool Staff::AddNewClass(const string &new_class_name) {
 
@@ -115,30 +312,69 @@ bool Staff::AddNewClass(const string &new_class_name) {
     return false;
 }
 
+
 bool Staff::ClassExisted(const string &new_class_name) {
 
-    ifstream* fi = new ifstream(Path::CLASS_LIST);
+    ifstream fi(Path::CLASS_LIST);
 
-    if (!fi->is_open()) {
+    if (fi.is_open()) {
         return false;
     }
 
-    string old_class_name;
+    string existed_class_name;
     bool existed = false;
 
-    while (!fi->eof()) {
-        *fi >> old_class_name;
-        if (old_class_name == new_class_name) {
+    while (fi >> existed_class_name) {
+        if (existed_class_name == new_class_name) {
             existed = true;
             break;
         } 
     }
-    fi->close();
+    fi.close();
 
     return existed;
 }
 
+
+bool Staff::IsExistedStudent(const int &id_to_find) {
+    ifstream fi(Path::ALL_STUDENT);
+
+    if (!fi.is_open()) {
+        return false; // ko ton tai id
+    }
+    int id;
+    string class_name;
+    while (fi >> id >> class_name) {
+        if (id == id_to_find) {
+            fi.close();
+            return true;
+        }
+    }
+    fi.close();
+    return false; // ko ton tai id
+}
+
+string Staff::FindClassWithID(const int &id_to_find) {
+    ifstream fi(Path::ALL_STUDENT);
+
+    if (!fi.is_open()) {
+        return ""; // ko ton tai id
+    }
+    int id;
+    string class_name;
+    while (fi >> id >> class_name) {
+        if (id == id_to_find) {
+            fi.close();
+            return class_name;
+        }
+    }
+    fi.close();
+    return ""; // ko ton tai id
+}
+
+
 void Staff::CreateStudent(ofstream &fo_class_student, ofstream &fo_all_student, Student &student, const string &class_name) {
+    Helper::NormalizeStudent(student);
     Helper::ConvertLastNameToDash(student.last_name);
 
     fo_class_student << student.ID << " " << student.first_name << " " << student.last_name <<
@@ -146,10 +382,40 @@ void Staff::CreateStudent(ofstream &fo_class_student, ofstream &fo_all_student, 
     fo_all_student << student.ID << " " << class_name << "\n";
 }
 
+
 void Staff::CreateAccount(ofstream &fo_account, const int &id, const string &user_name, const string &password, const UserRole &role){
 
 	fo_account << id << " " << user_name << " " << Generator::generatePassword(password) <<
                  " " << role << " " << 1 << "\n"; // firsttime is true
 
+}
+
+
+void Staff::DeleteAccount(const int &id){
+	vector <Account> ListAcc;
+	Account cur_acc;
+	int cur_role;
+
+	ifstream in;
+	in.open(Path::ACCOUNT);
+
+	while (in >> cur_acc.ID >> cur_acc.username >> cur_acc.password >> cur_role >> cur_acc.firstTimeLogin) {
+		if (id == cur_acc.ID)
+			continue;
+		cur_acc.role = Helper::FormatIntToRole(cur_role);
+		ListAcc.push_back(cur_acc);
+	}
+
+	in.close();
+
+	ofstream out;
+	out.open(Path::ACCOUNT);
+
+	while (!ListAcc.empty()) {
+		out << ListAcc.back().ID << " " << ListAcc.back().username << " " << ListAcc.back().password << " " << ListAcc.back().role << " " << ListAcc.back().firstTimeLogin << "\n";
+		ListAcc.pop_back();
+	}
+
+	out.close();
 }
 

@@ -14,8 +14,10 @@ class Staff {
 private:
     bool ClassExisted(const string &);
     bool AddNewClass(const string &); // them 1 class vo database
+    string FindClassWithID(const int &);
 	void CreateStudent(ofstream &fo_class_student, ofstream &fo_all_student, Student &student, const string &class_name);
     void CreateAccount(ofstream &fo_account, const int &id, const string &user_name, const string &password, const UserRole &role);
+    void DeleteAccount(const int &id);
 
 public:
     Staff();
@@ -23,6 +25,12 @@ public:
 
     //For class
     bool ImportClass(const string &class_name, const string &csv);
+    bool AddNewStudent(const string &class_name, Student &new_student);
+    bool ChangeStudentFromClassAToB(const int &id, string &class_b);
+    bool RemoveStudent(const int &ID);
+    bool EditStudent(Student &student);
+    Student GetStudent(const int &ID);
+    bool IsExistedStudent(const int &);
 };
 
 #endif

@@ -32,13 +32,21 @@ string Generator::generatePassword(const string  &pass) {
 }
 
 
-string Generator::generateEmail(const string &lastName, string firstName) {
+string Generator::generateEmail(const string &lastName, const string &firstName) {
 	string result = "";
-	for (int i = 0; i < lastName.length(); i++){
-		if (lastName[i] >= 65 && lastName[i] <= 90)
-			result += lastName[i] + 32;
+	string last_name = lastName;
+	for (int i = 0; i < last_name.length(); ++i) {
+		if (last_name[i] >= 'A' && last_name[i] <= 'Z') last_name[i] = last_name[i] - 'A' + 'a';
 	}
-	firstName[0] += 32;
+	for (int i = 0; i < last_name.length(); i++){
+		if (i == 0 || last_name[i - 1] == ' ') 
+			result += lastName[i];
+	}
+	string first_name = firstName;
+	for (int i = 0; i < first_name.length(); ++i) {
+		if (first_name[i] >= 'A' && first_name[i] <= 'Z') first_name[i] = first_name[i] - 'A' + 'a';
+	}
+	first_name[0] = first_name[0] - 'a' + 'A';
 	result += firstName + "18@apcs.vn";
 	return result;
 }

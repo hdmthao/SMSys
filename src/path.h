@@ -10,7 +10,7 @@ public:
     static const string CLASS_LIST;
     static const string ACCOUNT;
     static const string CLASS;
-    static const string STUDENTS;
+    static const string ALL_STUDENT;
     static const string IMPORT_STUDENT;
 };
 

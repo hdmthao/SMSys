@@ -31,6 +31,7 @@ void Helper::ConvertLastNameToSpace(string &str) { // "ha-duc-minh-thao" >> "ha 
         if (str[i] == '-') str[i] = ' ';
     }
 }
+
 void Helper::MakeClassDir(const string &new_class_name) {
     #if defined(_WIN32) || defined(WIN32)
         CreateDirectory(new_class_name.c_str(), NULL);
@@ -63,4 +64,20 @@ void Helper::FormatDay(string &str) {
             str[i] = '/';
         }
     }
+}
+
+UserRole Helper::FormatIntToRole(int &role){
+	switch (role) {
+	case UserRole::LECTURER:
+		return UserRole::LECTURER;
+
+	case UserRole::STAFF:
+		return UserRole::STAFF;
+
+	case UserRole::STUDENT:
+		return UserRole::STUDENT;
+
+	default:
+		break;
+	}
 }

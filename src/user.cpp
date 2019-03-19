@@ -1,6 +1,7 @@
 ﻿#include "user.h"
 #include "generator.h"
 #include "path.h"
+#include "helper.h"
 
 #include <fstream>
 #include <vector>
@@ -30,7 +31,7 @@ bool User::Login(const string &userName, const string &passWord) {
 
 	while (in >> cur_acc.ID >> cur_acc.username >> cur_acc.password >> cur_role >> cur_acc.firstTimeLogin) {
 		if (userName == cur_acc.username && Generator::generatePassword(passWord) == cur_acc.password) {
-			cur_acc.role = FormatIntToRole(cur_role);
+			cur_acc.role = Helper::FormatIntToRole(cur_role);
 			this->isAuthenticated = true;
 			this->account = new Account();
 			this->account->ID = cur_acc.ID;
@@ -79,7 +80,7 @@ bool User::ResetPassword(const string &oldPassword, const string &newPassword){
 			cur_acc.password = Generator::generatePassword(newPassword);
 			resetStatus = true;
 		}
-		cur_acc.role = FormatIntToRole(cur_role);
+		cur_acc.role = Helper::FormatIntToRole(cur_role);
 		ListAcc.push_back(cur_acc);
 	}
 	
@@ -100,52 +101,4 @@ bool User::ResetPassword(const string &oldPassword, const string &newPassword){
 	out.close();
 
 	return true;
-}
-
-
-void User::DeleteAccount(const int &id){
-	vector <Account> ListAcc;
-	Account cur_acc;
-	int cur_role;
-
-	ifstream in;
-	in.open(Path::ACCOUNT);
-
-	while (in >> cur_acc.ID >> cur_acc.username >> cur_acc.password >> cur_role >> cur_acc.firstTimeLogin) {
-		if (id == cur_acc.ID)
-			continue;
-		cur_acc.role = FormatIntToRole(cur_role);
-		ListAcc.push_back(cur_acc);
-	}
-
-	in.close();
-
-	ofstream out;
-	out.open(Path::ACCOUNT);
-
-	while (!ListAcc.empty()) {
-		out << ListAcc.back().ID << " " << ListAcc.back().username << " " << ListAcc.back().password << " " << ListAcc.back().role << " " << ListAcc.back().firstTimeLogin << "\n";
-		ListAcc.pop_back();
-	}
-
-	out.close();
-
-	return;
-}
-
-
-UserRole User::FormatIntToRole(int role){
-	switch (role) {
-	case UserRole::LECTURER:
-		return UserRole::LECTURER;
-
-	case UserRole::STAFF:
-		return UserRole::STAFF;
-
-	case UserRole::STUDENT:
-		return UserRole::STUDENT;
-
-	default:
-		break;
-	}
 }

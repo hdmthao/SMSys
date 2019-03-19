@@ -25,7 +25,11 @@ public:
 
 	//Staff
 	bool ImportClass(const string &class_name, const string &csv_name);
-
+	bool AddNewStudent(const string &class_name, Student &new_student);
+	bool ChangeStudentFromClassAToB(const int &id, string &class_b);
+	bool RemoveStudent(const int &ID);
+	bool EditStudent(Student &student);
+	Student GetStudent(const int &id);
 };
 
 #endif

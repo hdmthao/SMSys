@@ -8,7 +8,7 @@ using std::string;
 class Generator{
 public:
 	static string generatePassword(const string  &pass);
-	static string generateEmail(const string &lastName, string firstName);
+	static string generateEmail(const string &lastName, const string &firstName);
 
 };
 
