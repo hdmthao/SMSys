@@ -3,8 +3,6 @@
 
 #include <string>
 #include "data_student.h"
-#include "data_account.h"
-
 using std::string;
 
 class Helper {
@@ -13,9 +11,6 @@ public:
     static void ConvertLastNameToDash(string &);
     static void ConvertLastNameToSpace(string &);
     static void MakeClassDir(const string &);
-    static void NormalizeStudent(Student &student);
-    static void UpperFirstCharOfLetter(string &str);
-    static void FormatDay(string &str);
-    static UserRole FormatIntToRole(int &role);
+	static Student stringToStudent(string a, string classname);
 };
 #endif
