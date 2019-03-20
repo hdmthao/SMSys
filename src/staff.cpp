@@ -339,6 +339,39 @@ Student Staff::GetStudent(const int &ID) {
 }
 
 
+vector<string> Staff::GetClassList() {
+    vector<string> classes;
+	ifstream fin(Path::CLASS_LIST);
+	string class_name;
+	if (fin.is_open()) {
+		while (fin >> class_name) {
+			classes.push_back(class_name);
+		}
+    }
+	fin.close();
+    return classes;
+}
+
+
+vector<Student> Staff::GetStudentList(string &class_name) {
+    vector<Student> students_list;
+    Helper::StringToUpper(class_name);
+	string path = Path::CLASS + class_name + "/student.txt";
+	ifstream fin(path, ios::app);
+	if (fin.is_open()) {
+		while (!fin.eof()) {
+			string data_line;
+			getline(fin, data_line);
+			Student student;
+			student = Helper::stringToStudent(data_line, class_name);
+			if (student.ID == 0) break;
+			students_list.push_back(student);
+		}
+    }
+	fin.close();
+    return students_list;
+}
+
 bool Staff::AddNewClass(const string &new_class_name) {
 
     if (ClassExisted(new_class_name)) {

@@ -4,11 +4,13 @@
 #include "data_student.h"
 #include "data_account.h"
 
+#include <vector>
 #include <string>
 #include <fstream>
 
 using std::string;
 using std::ofstream;
+using std::vector;
 
 class Staff {
 private:
@@ -30,7 +32,10 @@ public:
     bool RemoveStudent(const int &ID);
     bool EditStudent(Student &student);
     Student GetStudent(const int &ID);
+    vector<string> GetClassList();
+	vector<Student> GetStudentList(string &class_name);
     bool IsExistedStudent(const int &);
+
 };
 
 #endif

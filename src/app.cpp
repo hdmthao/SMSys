@@ -78,8 +78,27 @@ bool App::EditStudent(Student &student) {
 	return edit_status;
 }
 
+
 Student App::GetStudent(const int &ID) {
 	Student student = staff->GetStudent(ID);
 
 	return student;
+}
+
+
+vector<string> App::GetClassList() {
+	vector<string> class_list;
+	
+	class_list = staff->GetClassList();
+	
+	return class_list;
+}
+
+
+vector<Student> App::GetStudentList(string &class_name) {
+	vector<Student> students_list;
+	
+	students_list = staff->GetStudentList(class_name);
+	
+	return students_list;
 }

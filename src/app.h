@@ -30,6 +30,8 @@ public:
 	bool RemoveStudent(const int &ID);
 	bool EditStudent(Student &student);
 	Student GetStudent(const int &id);
+	vector<string> GetClassList();
+	vector<Student> GetStudentList(string &class_name);
 };
 
 #endif

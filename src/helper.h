@@ -17,5 +17,6 @@ public:
     static void UpperFirstCharOfLetter(string &str);
     static void FormatDay(string &str);
     static UserRole FormatIntToRole(int &role);
+    static Student stringToStudent(string a, string classname);
 };
 #endif

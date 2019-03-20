@@ -117,6 +117,34 @@ void TestEditStudent() {
 	}
 }
 
+void TestViewListClass() {
+	cout << "### TEST VIEW LIST CLASS\n";
+	vector<string> class_list;
+	class_list = app->GetClassList();
+	for (int i = 0; i < class_list.size(); ++i) {
+		cout <<i + 1 << ". " << class_list[i] << "\n";
+	}
+	cout << "\n";
+	cout << "[OK] View List Class OK\n";
+
+	cout << "\n";
+	cout << "### TEST VIEW LIST STUDENT\n";
+
+	int id = getInt("Index Class");
+	vector<Student> students_list;
+
+	students_list = app->GetStudentList(class_list[id - 1]);
+	cout << ">> List Student Of Class " << class_list[id - 1] << "\n";
+	for (int i = 0; i < students_list.size(); ++i) {
+		cout << students_list[i].ID << " " << students_list[i].first_name << " " << students_list[i].last_name << " " <<
+			students_list[i].gender << " " << students_list[i].dob << " " << students_list[i].email << "\n";
+	}
+
+	cout << "\n";
+	cout << "[OK] View List Student OK\n";
+}
+
+
 int main() {
 	
 	// TestLogin();
@@ -124,5 +152,6 @@ int main() {
 	// TestAddNewStudent();
 	// TestChangeStudent();
 	// TestRemoveStudent();
-	 TestEditStudent();
+	// TestEditStudent();
+	// TestViewListClass();
 }

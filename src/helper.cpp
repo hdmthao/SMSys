@@ -81,3 +81,36 @@ UserRole Helper::FormatIntToRole(int &role){
 		break;
 	}
 }
+
+Student Helper::stringToStudent(string a, string classname)
+{
+	if (!a.empty())
+	{
+		string id;
+		Student x;
+		int count = 0;
+		for (int i = 0; i < a.length(); i++)
+		{
+			if (a.at(i) == ' ') count++;
+			else
+			{
+				if (count == 0) id.push_back(a.at(i));
+				if (count == 1) x.first_name.push_back(a.at(i));
+				if (count == 2) x.last_name.push_back(a.at(i));
+				if (count == 3) x.gender.push_back(a.at(i));
+				if (count == 4) x.dob.push_back(a.at(i));
+				if (count == 5) x.email.push_back(a.at(i));
+			}
+		}
+		x.ID = stoi(id);
+		x.class_name = classname;
+		ConvertLastNameToSpace(x.last_name);
+		return x;
+	}
+	else
+	{
+		Student x;
+		x.ID = 0;
+		return x;
+	}
+}
