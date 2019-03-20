@@ -155,8 +155,21 @@ bool Staff::ChangeStudentFromClassAToB(const int &id, string &class_b) {
     const string class_a = FindClassWithID(id);
     class_b = Helper::StringToUpper(class_b);
 
-    if (class_a == "" || class_b == "") return false; // ko ton tai 2 lon nay
+    if (class_a == "" || class_b == "") {
+        cout << ">> Class Not Exist\n";
+        return false; // ko ton tai 2 lop nay
+    }
 
+    if (class_a == class_b) { // hoc sinh da ton tai trong lop b
+        cout << ">> Student Was Existed In " << class_b << "\n";
+        return false;
+    }
+
+    if (!ClassExisted(class_b)) { // khong ton tai lop can chuyen den
+        cout << ClassExisted(class_b) << "\n";
+        cout << ">> Class " << class_b << " Not Exist\n";
+        return false;
+    }
     // change class_a in  file all student to class_b
     vector<pair<int, string>> vec;
     
@@ -167,7 +180,6 @@ bool Staff::ChangeStudentFromClassAToB(const int &id, string &class_b) {
 
     while (fi_all_student >> ID >> class_name) {
         if (ID == id) class_name = class_b;
-        cout << ID << " " << class_name << "\n";
         vec.push_back(std::make_pair(ID, class_name));
     }
     fi_all_student.close();
@@ -182,8 +194,39 @@ bool Staff::ChangeStudentFromClassAToB(const int &id, string &class_b) {
 
     fo_all_student.close();
 
+    // xoa student khoi class A
+    string tmp_path = Path::CLASS + class_a + "/student.txt";
+    ifstream fi_class_student(tmp_path);
 
-    cout << class_a << " " << class_b << "\n";
+    vector<Student> student_list;
+    Student tmp_student;
+    Student student_will_move;
+    while (fi_class_student >> tmp_student.ID >> tmp_student.first_name >> tmp_student.last_name >>
+            tmp_student.gender >> tmp_student.dob >> tmp_student.email) {
+                if (tmp_student.ID == id) {
+                    student_will_move = tmp_student;
+                    continue;
+                }
+                student_list.push_back(tmp_student);
+            }
+    fi_class_student.close();
+
+    // ghi lai du lieu cua class _ a
+    ofstream fo_class_student(tmp_path);
+
+    for (int i = 0; i < student_list.size(); ++i) {
+        fo_class_student << student_list[i].ID << " " << student_list[i].first_name << " " << student_list[i].last_name << " " <<
+            student_list[i].gender << " " << student_list[i].dob << " " << student_list[i].email << "\n";
+    }
+    student_list.clear();
+    fo_class_student.close();
+
+    tmp_path = Path::CLASS + class_b + "/student.txt";
+    fo_class_student.open(tmp_path, ios::app);
+    fo_class_student << student_will_move.ID << " " << student_will_move.first_name << " " << student_will_move.last_name << " " <<
+        student_will_move.gender << " " <<  student_will_move.dob <<" " <<  student_will_move.email << "\n";
+    fo_class_student.close();
+    return true;
 }
 
 
@@ -317,7 +360,7 @@ bool Staff::ClassExisted(const string &new_class_name) {
 
     ifstream fi(Path::CLASS_LIST);
 
-    if (fi.is_open()) {
+    if (!fi.is_open()) {
         return false;
     }
 

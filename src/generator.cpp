@@ -40,7 +40,7 @@ string Generator::generateEmail(const string &lastName, const string &firstName)
 	}
 	for (int i = 0; i < last_name.length(); i++){
 		if (i == 0 || last_name[i - 1] == ' ') 
-			result += lastName[i];
+			result += last_name[i];
 	}
 	string first_name = firstName;
 	for (int i = 0; i < first_name.length(); ++i) {

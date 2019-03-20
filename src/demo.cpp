@@ -83,10 +83,11 @@ void TestChangeStudent() {
 	string class_b;
 	class_b = getString("Lop can chuyen den");
 
+	cout << "\n";
 	if (app->ChangeStudentFromClassAToB(id, class_b)) {
-		cout << "Chuyen thanh cong id " << id << " sang lop " << class_b << "\n";
+		cout << "[OK] Change OK\n";
 	} else {
-		cout << "Khong ton tai id " << id << " hoac lop " << class_b << "\n";
+		cout << "[X]  Change FAIL\n";
 	}
 }
 
@@ -123,5 +124,5 @@ int main() {
 	// TestAddNewStudent();
 	// TestChangeStudent();
 	// TestRemoveStudent();
-	TestEditStudent();
+	 TestEditStudent();
 }
