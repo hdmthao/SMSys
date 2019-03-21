@@ -7,10 +7,10 @@ using std::string;
 
 struct Course {
 	string ID;
-	string Lecturer;
-	string startDay;
-	string endDay;
 	string name;
+	string lecturer;
+	string start_date;
+	string end_date;
 };
 
 #endif
