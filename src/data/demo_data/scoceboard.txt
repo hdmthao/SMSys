@@ -1,0 +1,9 @@
+18125006 Pham-Le-Thuy-Dung  10 10 1  10 A+ 10
+18125007 Vu-Tran-Duy Male 10 10 1  10 A+ 10
+18125017 La-Hoang-Phong Male 10 10 1  10 A+ 10
+18125025 Nguyen-Manh-Thien 10 10 1  10 A+ 10
+18125037 Nguyen-Ngoc-Anh-Khoa 10 10 1  10 A+ 10
+18125043 Cao-The-San 10 10 1  10 A+ 4 10
+18125046 Nguyen-E-Ro 10 10 1  10 A+ 10
+18125049 Huynh-Minh-Hieu 10 10 1  10 A+ 10
+18125095 Ha-Duc-Minh-Thao 10 10 1  10 A+ 10
