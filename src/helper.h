@@ -5,18 +5,23 @@
 #include "data_student.h"
 #include "data_account.h"
 
+#include <vector>
+
 using std::string;
+using std::vector;
+
 
 class Helper {
 public:
     static string StringToUpper(const string &);
-    static void ConvertLastNameToDash(string &);
-    static void ConvertLastNameToSpace(string &);
-    static void MakeClassDir(const string &);
+    static void ConvertStringToDash(string &);
+    static void ConvertStringToSpace(string &);
+    static void MakeDir(const string &);
     static void NormalizeStudent(Student &student);
     static void UpperFirstCharOfLetter(string &str);
     static void FormatDay(string &str);
     static UserRole FormatIntToRole(int &role);
     static Student stringToStudent(string a, string classname);
+    static void GetFileInFolder(vector<string> &lists, string &path);
 };
 #endif

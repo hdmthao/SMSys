@@ -35,7 +35,8 @@ public:
     vector<string> GetClassList();
 	vector<Student> GetStudentList(string &class_name);
     bool IsExistedStudent(const int &);
-
+    vector<string> GetCsvForClass();
+    vector<string> GetCsvForCourse();
 };
 
 #endif

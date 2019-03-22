@@ -144,6 +144,43 @@ void TestViewListClass() {
 	cout << "[OK] View List Student OK\n";
 }
 
+void TestGetCSVFile() {
+	cout << "### TEST GET CSV FILE\n";
+
+	vector<string> lists = app->GetCsvForClass();
+	cout << ">> List File In Folder Data/Import/Class\n";
+
+	for (int i = 0; i < lists.size(); ++i) {
+		cout << lists[i] << "\n";
+	}
+	lists.clear();
+
+	lists = app->GetCsvForCourse();
+
+	cout << "\n";
+	cout << ">> List File In Folder Data/Import/Course\n";
+
+	for (int i = 0; i < lists.size(); ++i) {
+		cout << lists[i] << "\n";
+	}
+	cout << "\n";
+	cout << "[OK] View List Csv OK\n";
+}
+
+void TestImportCourse() {
+	cout << "### TEST IMPORT COURSE\n";
+
+	string course_id = getString("Course ID");
+	string  csv_name = "CS162.csv";
+
+	cout << "\n";
+
+	if (app->ImportCourse(course_id, csv_name)) {
+		cout << "[OK] Import Course OK\n";
+	} else {
+		cout << "[X]  Import Course FAIL\n";
+	}
+}
 
 int main() {
 	
@@ -154,4 +191,6 @@ int main() {
 	// TestRemoveStudent();
 	// TestEditStudent();
 	// TestViewListClass();
+	// TestGetCSVFile();
+	TestImportCourse();
 }

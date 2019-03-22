@@ -37,7 +37,7 @@ bool Staff::ImportClass(const string &class_name, const string &csv_name) {
     const bool is_existed_class = AddNewClass(new_class_name);
 
     if (!is_existed_class) { // if class not existed then make new folder for it
-        Helper::MakeClassDir(path_to_class_dir);
+        Helper::MakeDir(path_to_class_dir);
     }
 
     // get student existed in class to check existed student
@@ -288,7 +288,7 @@ bool Staff::RemoveStudent(const int &ID){
 bool Staff::EditStudent(Student &student){
 	bool done = false;
     Helper::NormalizeStudent(student);
-    Helper::ConvertLastNameToDash(student.last_name);
+    Helper::ConvertStringToDash(student.last_name);
 
     const string class_name = FindClassWithID(student.ID);
     if (class_name == "") return false;
@@ -451,7 +451,7 @@ string Staff::FindClassWithID(const int &id_to_find) {
 
 void Staff::CreateStudent(ofstream &fo_class_student, ofstream &fo_all_student, Student &student, const string &class_name) {
     Helper::NormalizeStudent(student);
-    Helper::ConvertLastNameToDash(student.last_name);
+    Helper::ConvertStringToDash(student.last_name);
 
     fo_class_student << student.ID << " " << student.first_name << " " << student.last_name <<
                         " " << student.gender << " " << student.dob << " " << student.email << "\n";
@@ -495,3 +495,17 @@ void Staff::DeleteAccount(const int &id){
 	out.close();
 }
 
+
+vector<string> Staff::GetCsvForClass() {
+    vector<string> lists;
+    string tmp_path = Path::IMPORT_STUDENT;
+    Helper::GetFileInFolder(lists, tmp_path);
+    return lists;
+}
+
+vector<string> Staff::GetCsvForCourse() {
+    vector<string> lists;
+    string tmp_path = Path::IMPORT_COURSE;
+    Helper::GetFileInFolder(lists, tmp_path);
+    return lists;
+}

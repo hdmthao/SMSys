@@ -13,7 +13,7 @@ const string Path::CLASS_LIST = "data/class/classes_list.txt";
 const string Path::CLASS = "data/class/";
 
 // Path to folder save all csv file to import class
-const string Path::IMPORT_STUDENT = "data/import/student/";
+const string Path::IMPORT_STUDENT = "data/import/class/";
 
 // Path to list of all existed student
 const string Path::ALL_STUDENT = "data/student/students_list.txt";

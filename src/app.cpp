@@ -4,11 +4,15 @@
 App::App() :
 	user(nullptr) {
 	user = new User();
+	staff = new Staff();
+	courses = new Courses();
 }
 
 
 App::~App() {
 	delete user;
+	delete staff;
+	delete courses;
 }
 
 
@@ -101,4 +105,31 @@ vector<Student> App::GetStudentList(string &class_name) {
 	students_list = staff->GetStudentList(class_name);
 	
 	return students_list;
+}
+
+
+vector<string> App::GetCsvForClass() {
+	vector<string> lists;
+
+	lists = staff->GetCsvForClass();
+
+	return lists;
+}
+
+
+bool App::ImportCourse(const string &course_id, const string &csv_name) {
+	bool import_status;
+	
+	import_status = courses->ImportCourse(course_id, csv_name);
+
+	return import_status;
+}
+
+
+vector<string> App::GetCsvForCourse() {
+	vector<string> lists;
+
+	lists = staff->GetCsvForCourse();
+
+	return lists;
 }

@@ -3,6 +3,7 @@
 
 #include "user.h"
 #include "staff.h"
+#include "courses.h"
 
 #include <string>
 
@@ -14,7 +15,8 @@ class App {
 private:
 	User* user;
 	Staff* staff;
-
+	Courses* courses;
+		
 public:
 	App();
 	~App();
@@ -32,6 +34,11 @@ public:
 	Student GetStudent(const int &id);
 	vector<string> GetClassList();
 	vector<Student> GetStudentList(string &class_name);
+	vector<string> GetCsvForClass();
+	vector<string> GetCsvForCourse();
+
+	//Courses
+	bool ImportCourse(const string &course_id, const string &csv_name);
 };
 
 #endif

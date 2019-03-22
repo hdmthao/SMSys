@@ -3,10 +3,10 @@
 #else
     #include <sys/types.h>
     #include <sys/stat.h>
+	#include <dirent.h>
 #endif
 
 #include "helper.h"
-
 
 string Helper::StringToUpper(const string &str) {
     string new_string = str;
@@ -20,23 +20,23 @@ string Helper::StringToUpper(const string &str) {
     return new_string;
 }
 
-void Helper::ConvertLastNameToDash(string &str) { // "ha duc minh thao" >> "ha-duc-minh-thao"
+void Helper::ConvertStringToDash(string &str) { // "ha duc minh thao" >> "ha-duc-minh-thao"
     for (int i = 0; i < str.length(); ++i) {
         if (str[i] == ' ') str[i] = '-';
     }
 }
 
-void Helper::ConvertLastNameToSpace(string &str) { // "ha-duc-minh-thao" >> "ha duc minh thao"
+void Helper::ConvertStringToSpace(string &str) { // "ha-duc-minh-thao" >> "ha duc minh thao"
     for (int i = 0; i < str.length(); ++i) {
         if (str[i] == '-') str[i] = ' ';
     }
 }
 
-void Helper::MakeClassDir(const string &new_class_name) {
+void Helper::MakeDir(const string &new_dir) {
     #if defined(_WIN32) || defined(WIN32)
-        CreateDirectory(new_class_name.c_str(), NULL);
+        CreateDirectory(new_dir.c_str(), NULL);
     #else
-        mkdir(new_class_name.c_str(), 0733);
+        mkdir(new_dir.c_str(), 0733);
     #endif
 }
 
@@ -104,7 +104,7 @@ Student Helper::stringToStudent(string a, string classname)
 		}
 		x.ID = stoi(id);
 		x.class_name = classname;
-		ConvertLastNameToSpace(x.last_name);
+		ConvertStringToSpace(x.last_name);
 		return x;
 	}
 	else
@@ -113,4 +113,18 @@ Student Helper::stringToStudent(string a, string classname)
 		x.ID = 0;
 		return x;
 	}
+}
+
+
+void Helper::GetFileInFolder(vector<string> &lists, string &path) {
+    DIR* dir;
+
+    dir = opendir(path.c_str());
+    struct dirent* ent;
+    while ((ent = readdir(dir))) {
+        std::string s = ent->d_name;
+        if (s == "." || s == "..") continue;
+        lists.push_back(s);
+    }
+    closedir(dir);
 }
