@@ -6,7 +6,7 @@ private:
 
 public:
     Courses();
-    ~Courses();    
+    ~Courses();  
 };
 
 #endif

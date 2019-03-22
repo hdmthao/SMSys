@@ -7,11 +7,21 @@ using std::string;
 
 class Path {
 public:
-    static const string CLASS_LIST;
+    // Account
     static const string ACCOUNT;
+
+    // Class
+    static const string CLASS_LIST;
     static const string CLASS;
     static const string ALL_STUDENT;
     static const string IMPORT_STUDENT;
+
+    // Course
+    static string ACADEMIC_YEAR;
+    static string SEMESTER;
+    static string COURSE; 
+    static string COURSES_LIST;
+    static const string IMPORT_COURSE;
 };
 
 #endif
