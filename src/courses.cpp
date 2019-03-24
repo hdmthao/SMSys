@@ -86,6 +86,8 @@ bool Courses::ImportCourse(const string &course_id, const string &csv_name) {
     ofstream fo(path_to_course_dir + "/course_info.txt");
     Helper::UpperFirstCharOfLetter(new_course.name);
     Helper::ConvertStringToDash(new_course.name);
+    Helper::FormatDay(new_course.start_date);
+    Helper::FormatDay(new_course.end_date);
     fo << new_course.ID << " " << new_course.name << " " <<  new_course.lecturer << " " <<
         new_course.start_date << " " << new_course.end_date;
     fo.close();
@@ -124,6 +126,61 @@ bool Courses::ImportCourse(const string &course_id, const string &csv_name) {
     return true;
 }
 
+
+bool Courses::AddNewCourse(Course &new_course, string &class_name, int number_period, Period &period_1, Period &period_2) {
+    new_course.ID = Helper::StringToUpper(new_course.ID);
+    class_name = Helper::StringToUpper(class_name);
+    Helper::FormatDay(new_course.start_date);
+    Helper::FormatDay(new_course.end_date);
+    period_1.room = Helper::StringToUpper(period_1.room);
+    period_2.room = Helper::StringToUpper(period_2.room);
+    Helper::ConvertStringToDash(new_course.name);
+
+    const string path_to_course_dir = Path::COURSE + new_course.ID;
+
+    if (!ExistedCourse(new_course.ID)) {
+        AddNewCourseToDatabase(new_course.ID);
+        Helper::MakeDir(path_to_course_dir);
+    } else {
+        return false;
+    }
+
+    // Save info course
+    ofstream fo(path_to_course_dir + "/course_info.txt");  
+    fo << new_course.ID << " " << new_course.name << " " << new_course.lecturer <<
+    " " << new_course.start_date << " " << new_course.end_date;
+    fo.close();
+    
+    // Save Schedule
+    fo.open(path_to_course_dir + "/schedule.txt");
+    fo << number_period << "\n";
+    fo << period_1.dow << " " << period_1.shift << " " << period_1.room;
+    if (number_period == 2) {
+        fo << "\n";
+        fo << period_2.dow << " " << period_2.shift << " " << period_2.room;
+    }
+
+    // Save info student && init scoreboard
+    ifstream fi(Path::CLASS + class_name + "/student.txt");
+    if (fi.is_open()) {
+        fo.open(path_to_course_dir + "/student_info.txt");
+        ofstream fo_score(path_to_course_dir + "/scoreboard.txt");
+        string id, first_name, last_name, line;
+        while (!fi.eof()) {
+            getline(fi, id, ' ');
+            if (id == "") break;
+            getline(fi, first_name, ' ');
+            getline(fi, last_name, ' ');
+            getline(fi, line);
+            fo << id << " " << first_name << " "<< last_name << " " << line << "\n";
+            fo_score << id << " " << first_name << " " << last_name << " " << "0 0 0 0 NULL 0\n"; 
+        }
+        fo.close();
+        fo_score.close();
+    }
+    fi.close();
+    return true;
+}
 
 bool Courses::ExistedCourse(const string &course_id) {
     ifstream fi(Path::COURSES_LIST);

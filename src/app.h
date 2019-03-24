@@ -39,6 +39,7 @@ public:
 
 	//Courses
 	bool ImportCourse(const string &course_id, const string &csv_name);
+	bool AddNewCourse(Course &new_course, string &class_name, int number_period, Period &period_1, Period &period_2);
 };
 
 #endif

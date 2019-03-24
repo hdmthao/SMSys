@@ -182,6 +182,37 @@ void TestImportCourse() {
 	}
 }
 
+void TestAddNewCourse() {
+	cout << "### TEST ADD NEW COURSE\n";
+
+	Course new_course;
+	new_course.ID = getString("Course ID");
+	new_course.name = getString("name");
+	new_course.lecturer = getString("lecture");
+	string class_name = getString("class name");
+	new_course.start_date = getString("start date");
+	new_course.end_date = getString("end date");
+
+	int number_period = getInt("number priod");
+	Period period_1, period_2;
+	period_1.dow = getInt("Day of week of period 1");
+	period_1.shift = getInt("Shift of period 1");
+	period_1.room = getString("Room of period 1");
+	if (number_period == 2) {
+		period_2.dow = getInt("Day of week of period 2");
+		period_2.shift = getInt("Shift of period 2");
+		period_2.room = getString("Room of period 2");
+	}
+
+	cout << "\n";
+
+	if (app->AddNewCourse(new_course, class_name, number_period, period_1, period_2)) {
+		cout << "[OK] Add New Course OK\n";
+	} else {
+		cout << "[X]  Add New Course FAIL\n";
+	}
+}
+
 int main() {
 	
 	// TestLogin();
@@ -192,5 +223,6 @@ int main() {
 	// TestEditStudent();
 	// TestViewListClass();
 	// TestGetCSVFile();
-	TestImportCourse();
+	// TestImportCourse();
+	TestAddNewCourse();
 }

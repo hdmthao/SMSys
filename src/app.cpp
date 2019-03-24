@@ -126,6 +126,15 @@ bool App::ImportCourse(const string &course_id, const string &csv_name) {
 }
 
 
+bool App::AddNewCourse(Course &new_course, string &class_name, int number_period, Period &period_1, Period &period_2) {
+	bool add_status;
+
+	add_status = courses->AddNewCourse(new_course, class_name, number_period, period_1, period_2);
+
+	return add_status;
+}
+
+
 vector<string> App::GetCsvForCourse() {
 	vector<string> lists;
 
