@@ -3,10 +3,11 @@
 #else
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <dirent.h>
+#include "dirent.h"
 #endif
 
 #include "helper.h"
+#include "dirent.h"
 
 string Helper::StringToUpper(const string &str) {
 	string new_string = str;
@@ -135,13 +136,16 @@ Attendance Helper::stringToAttendance(string a)
 	if (!a.empty())
 	{
 		Attendance x;
+		string ID;
 		int count = 0;
 		for (int i = 0; i < a.length(); i++)
 		{
 			if (a.at(i) == ' ') count++;
 			else
 			{
-				if (count == 0) x.StudentID.push_back(a.at(i));
+				if (count == 0) ID.push_back(a.at(i));
+				if (count == 1) x.first_name.push_back(a.at(i));
+				if (count == 2) x.last_name.push_back(a.at(i));
 				if (count >= 3)
 				{
 					if (a.at(i) == '1') x.week.push_back(1);
@@ -154,13 +158,16 @@ Attendance Helper::stringToAttendance(string a)
 		{
 			result.week.push_back(x.week.at(i) + x.week.at(i + 1));
 		}
-		result.StudentID = x.StudentID;
+		result.StudentID = stoi(ID);
+		result.first_name = x.first_name;
+		result.last_name = x.last_name;
+		ConvertStringToSpace(result.last_name);
 		return result;
 	}
 	else
 	{
 		Attendance x;
-		x.StudentID = "";
+		x.StudentID = 0;
 		return x;
 	}
 }

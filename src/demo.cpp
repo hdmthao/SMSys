@@ -224,7 +224,7 @@ void TestViewCourseList()
 	Attendance_list = app->GetAttendanceList(course_list[id - 1]);
 	cout << ">> Attendance List Of Course " << course_list[id - 1] << "\n";
 	for (int i = 0; i < Attendance_list.size(); ++i) {
-		cout << Attendance_list[i].StudentID << ": \n";
+		cout << Attendance_list[i].StudentID << " "<< Attendance_list[i].last_name <<" "<< Attendance_list[i].first_name<<"\n";
 		cout << "Week \n";
 		for (int k = 0; k < Attendance_list[i].week.size(); k++)
 		{
