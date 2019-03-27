@@ -27,13 +27,13 @@ public:
 
     //For class
     bool ImportClass(const string &class_name, const string &csv);
-    bool AddNewStudent(const string &class_name, Student &new_student);
+    bool AddNewStudentToClass(const string &class_name, Student &new_student);
     bool ChangeStudentFromClassAToB(const int &id, string &class_b);
-    bool RemoveStudent(const int &ID);
-    bool EditStudent(Student &student);
+    bool RemoveStudentFromClass(const int &ID);
+    bool EditStudentFromClass(Student &student);
     Student GetStudent(const int &ID);
     vector<string> GetClassList();
-	vector<Student> GetStudentList(string &class_name);
+	vector<Student> GetStudentListFromClass(string &class_name);
     bool IsExistedStudent(const int &);
     vector<string> GetCsvForClass();
     vector<string> GetCsvForCourse();

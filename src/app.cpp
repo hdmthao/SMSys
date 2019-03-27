@@ -47,10 +47,10 @@ bool App::ImportClass(const string &class_name, const string &csv_name) {
 }
 
 
-bool App::AddNewStudent(const string &class_name, Student &new_student) {
+bool App::AddNewStudentToClass(const string &class_name, Student &new_student) {
 	bool add_status = false;
 
-	add_status = staff->AddNewStudent(class_name, new_student);
+	add_status = staff->AddNewStudentToClass(class_name, new_student);
 
 	return add_status;
 }
@@ -65,19 +65,19 @@ bool App::ChangeStudentFromClassAToB(const int &id, string &class_b) {
 }
 
 
-bool App::RemoveStudent(const int &ID) {
+bool App::RemoveStudentFromClass(const int &ID) {
 	bool remove_status = false;
 
-	remove_status = staff->RemoveStudent(ID);
+	remove_status = staff->RemoveStudentFromClass(ID);
 
 	return remove_status;
 }
 
 
-bool App::EditStudent(Student &student) {
+bool App::EditStudentFromClass(Student &student) {
 	bool edit_status = false;
 
-	edit_status = staff->EditStudent(student);
+	edit_status = staff->EditStudentFromClass(student);
 
 	return edit_status;
 }
@@ -99,10 +99,10 @@ vector<string> App::GetClassList() {
 }
 
 
-vector<Student> App::GetStudentList(string &class_name) {
+vector<Student> App::GetStudentListFromClass(string &class_name) {
 	vector<Student> students_list;
 	
-	students_list = staff->GetStudentList(class_name);
+	students_list = staff->GetStudentListFromClass(class_name);
 	
 	return students_list;
 }
@@ -132,6 +132,24 @@ bool App::AddNewCourse(Course &new_course, string &class_name, int number_period
 	add_status = courses->AddNewCourse(new_course, class_name, number_period, period_1, period_2);
 
 	return add_status;
+}
+
+
+bool App::AddStudentToCourse(const string &course_id, int student_id) {
+	bool add_status = false;
+
+	add_status = courses->AddStudentToCourse(course_id, student_id);
+
+	return add_status;
+}
+
+
+bool App::RemoveStudentFromCourse(const string &course_id, int del_student) {
+	bool remove_status = false;
+
+	remove_status = courses->RemoveStudentFromCourse(course_id, del_student);
+
+	return remove_status;
 }
 
 

@@ -105,7 +105,7 @@ bool Staff::ImportClass(const string &class_name, const string &csv_name) {
 }
 
 
-bool Staff::AddNewStudent(const string &class_name, Student &new_student) {
+bool Staff::AddNewStudentToClass(const string &class_name, Student &new_student) {
     string new_class_name = Helper::StringToUpper(class_name);
     string path_to_class = Path::CLASS + new_class_name + "/student.txt";
 
@@ -230,7 +230,7 @@ bool Staff::ChangeStudentFromClassAToB(const int &id, string &class_b) {
 }
 
 
-bool Staff::RemoveStudent(const int &ID){
+bool Staff::RemoveStudentFromClass(const int &ID){
 	int done = 0;
 	vector <Student> studentList;
 	Student tmp_student;
@@ -285,7 +285,7 @@ bool Staff::RemoveStudent(const int &ID){
 }
 
 
-bool Staff::EditStudent(Student &student){
+bool Staff::EditStudentFromClass(Student &student){
 	bool done = false;
     Helper::NormalizeStudent(student);
     Helper::ConvertStringToDash(student.last_name);
@@ -353,7 +353,7 @@ vector<string> Staff::GetClassList() {
 }
 
 
-vector<Student> Staff::GetStudentList(string &class_name) {
+vector<Student> Staff::GetStudentListFromClass(string &class_name) {
     vector<Student> students_list;
     Helper::StringToUpper(class_name);
 	string path = Path::CLASS + class_name + "/student.txt";

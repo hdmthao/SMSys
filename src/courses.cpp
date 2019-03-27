@@ -182,6 +182,102 @@ bool Courses::AddNewCourse(Course &new_course, string &class_name, int number_pe
     return true;
 }
 
+
+bool Courses::AddStudentToCourse(const string & course_id, const int student_id) {
+    // Check student existed in class
+    if (!IsExistedStudent(student_id)) {
+        return false;
+    }
+
+    const string COURSE_ID = Helper::StringToUpper(course_id);
+	Student NewStudent = GetStudent(student_id);
+	string SBoardPath = Path::COURSE + COURSE_ID + "/scoreboard.txt";
+	string SInfoPath = Path::COURSE + COURSE_ID + "/student_info.txt";
+	
+    // Check studnet existed in course
+    ifstream fi(SInfoPath);
+    Student tmp_student;
+    while (fi >> tmp_student.ID >> tmp_student.first_name >> tmp_student.last_name >> tmp_student.gender >> 
+            tmp_student.dob >> tmp_student.email) {
+                if (tmp_student.ID == student_id) {
+                    fi.close();
+                    return false;
+                }
+            }
+    fi.close();
+	ofstream fout;
+    // Add to Score Board, scoreboard.txt
+	fout.open(SBoardPath, ios::app);
+	fout << NewStudent.ID << " " << NewStudent.first_name << " " << NewStudent.last_name << " 0 0 0 0 NULL 0\n";
+	fout.close();
+    // Add to Student List, student_info.txt
+	fout.open(SInfoPath, ios::app);
+	fout << NewStudent.ID << " " << NewStudent.first_name << " " << NewStudent.last_name << " " << NewStudent.gender << " " << NewStudent.dob << " " << NewStudent.email << "\n";
+	fout.close();
+	return true;
+}
+
+bool Courses::RemoveStudentFromCourse(const string & course_id, const int del_student){
+    const string COURSE_ID  = Helper::StringToUpper(course_id);
+	string SBoardPath = Path::COURSE + COURSE_ID + "/scoreboard.txt";
+	string SInfoPath = Path::COURSE + COURSE_ID + "/student_info.txt";
+
+	ifstream fin;
+	ofstream fout;
+
+    // Check existed studnent in course && Get student list student_info.txt
+	vector <Student> StudentList;
+	Student TmpStudent;
+    bool existed_del_student = false;
+
+	fin.open(SInfoPath);
+	while (fin >> TmpStudent.ID >> TmpStudent.first_name >> TmpStudent.last_name >> TmpStudent.gender >> TmpStudent.dob >> TmpStudent.email) {
+		if (TmpStudent.ID != del_student) {
+			StudentList.push_back(TmpStudent);
+        } else {
+            existed_del_student = true;
+        }
+	}
+	fin.close();
+
+    if (!existed_del_student) {
+        StudentList.clear();
+        return false;
+    }
+
+    // Rewrite student list to student_info.txt
+	fout.open(SInfoPath);
+	for (int i = 0; i < StudentList.size(); i++) {
+		fout << StudentList[i].ID << " " << StudentList[i].first_name << " " << StudentList[i].last_name << " " << StudentList[i].gender << " " << StudentList[i].dob << " " << StudentList[i].email << "\n";
+	}
+	fout.close();
+	StudentList.clear();
+
+    // Get from Score Board, scoreboard.txt;
+	vector <Score> ScoreList;
+	Score TmpScore;
+
+	fin.open(SBoardPath);
+	while (fin >> TmpScore.ID >> TmpScore.first_name >> TmpScore.last_name >> TmpScore.mid_term >> TmpScore.lab >>
+        TmpScore.bonus >> TmpScore.final_term >> TmpScore.ABCF >> TmpScore.GPA) {
+		if (TmpScore.ID != del_student) {
+			ScoreList.push_back(TmpScore);
+		}
+	}
+	fin.close();
+
+    // Rewrite Score Board, scoreboard.txt
+	fout.open(SBoardPath);
+	for (int i = 0; i < ScoreList.size(); i++) {
+		fout << ScoreList[i].ID << " " << ScoreList[i].first_name << " " << ScoreList[i].last_name << " " << ScoreList[i].mid_term << " " <<
+        ScoreList[i].lab << " " << ScoreList[i].bonus << " " << ScoreList[i].final_term << " " << ScoreList[i].ABCF << " " << ScoreList[i].GPA << "\n";
+	}
+	fout.close();
+	ScoreList.clear();
+
+    return true;
+}
+
 bool Courses::ExistedCourse(const string &course_id) {
     ifstream fi(Path::COURSES_LIST);
     if (!fi.is_open()) {
