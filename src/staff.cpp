@@ -503,9 +503,65 @@ vector<string> Staff::GetCsvForClass() {
     return lists;
 }
 
+
 vector<string> Staff::GetCsvForCourse() {
     vector<string> lists;
     string tmp_path = Path::IMPORT_COURSE;
     Helper::GetFileInFolder(lists, tmp_path);
     return lists;
+}
+
+
+vector<string> Staff::GetCourselist() {
+	vector<string> courses;
+	ifstream fin(Path::COURSES_LIST);
+	string course_name;
+	if (fin.is_open()) {
+		while (fin >> course_name) {
+			courses.push_back(course_name);
+		}
+	}
+	fin.close();
+	return courses;
+}
+
+
+vector<Student> Staff::GetStudentListFromCourse(string &course_id) {
+	vector<Student> students_list;
+	Helper::StringToUpper(course_id);
+	string path = Path::COURSE + course_id + "/student_info.txt";
+	ifstream fin(path);
+	if (fin.is_open()) {
+		while (!fin.eof()) {
+			string data_line;
+			getline(fin, data_line);
+			Student student;
+			student = Helper::stringToStudent(data_line, "");
+			if (student.ID == 0) break;
+            Helper::ConvertStringToSpace(student.last_name);
+			students_list.push_back(student);
+		}
+	}
+	fin.close();
+	return students_list;
+}
+
+
+vector<Attendance> Staff::GetAttendanceList(string &course_id) {
+	vector<Attendance> attendance_list;
+	Helper::StringToUpper(course_id);
+	string path = Path::COURSE + course_id + "/attendance.txt";
+	ifstream fin(path, ios::app);
+	if (fin.is_open()) {
+		while (!fin.eof()) {
+			string data_line;
+			getline(fin, data_line);
+			Attendance attendance;
+			attendance = Helper::stringToAttendance(data_line);
+			if (attendance.ID == 0) break;
+			attendance_list.push_back(attendance);
+		}
+	}
+	fin.close();
+	return attendance_list;
 }

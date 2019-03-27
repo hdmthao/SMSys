@@ -3,6 +3,7 @@
 
 #include "data_student.h"
 #include "data_account.h"
+#include "data_attendance.h"
 
 #include <vector>
 #include <string>
@@ -37,6 +38,9 @@ public:
     bool IsExistedStudent(const int &);
     vector<string> GetCsvForClass();
     vector<string> GetCsvForCourse();
+    vector<string> GetCourselist();
+	vector<Student> GetStudentListFromCourse(string &course_id);
+	vector<Attendance> GetAttendanceList(string &course_id);
 };
 
 #endif

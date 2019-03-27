@@ -1,13 +1,20 @@
 #include "app.h"
+#include "helper.h"
 
 #include <iostream>
 #include <string>
 #include <limits>
+#include <iomanip>
 
 using std::cerr;
 using std::cin;
 using std::cout;
 using std::string;
+using std::setw;
+using std::left;
+using std::setfill;
+using std::pair;
+using std::make_pair;
 
 App* app = new App();
 
@@ -135,11 +142,22 @@ void TestViewListClass() {
 
 	students_list = app->GetStudentListFromClass(class_list[id - 1]);
 	cout << ">> List Student Of Class " << class_list[id - 1] << "\n";
-	for (int i = 0; i < students_list.size(); ++i) {
-		cout << students_list[i].ID << " " << students_list[i].first_name << " " << students_list[i].last_name << " " <<
-			students_list[i].gender << " " << students_list[i].dob << " " << students_list[i].email << "\n";
-	}
+	cout << "\n";
 
+	cout << setw(12) << left << "ID" << setw(25) << left <<  "Full Name" << setw(9) << left << "Gender" <<
+	setw(15) << left << "Day Of Birth" << setw(25) << left << "Email" << "\n";
+	cout << setfill('-') << setw(80) << "-" << "\n";
+	cout << setfill(' ');
+	for (int i = 0; i < students_list.size(); ++i) {
+		cout << setw(12) << left << students_list[i].ID;
+		cout << setw(25) << left << Helper::GetFullName(students_list[i].first_name, students_list[i].last_name);
+		cout << setw(9) << left << students_list[i].gender;
+		cout << setw(15) << left << students_list[i].dob;
+		cout << setw(25) << left << students_list[i].email;
+		cout << "\n";
+	}
+	cout << setfill('-') << setw(80) << "-" << "\n";
+	cout << setfill(' ');
 	cout << "\n";
 	cout << "[OK] View List Student OK\n";
 }
@@ -244,19 +262,167 @@ void TestRemoveStudentFromCourse() {
 	cout << "[OK] Remove Student From Course OK\n";
 }
 
+void TestViewCourseList() {
+	cout << "### TEST VIEW LIST COURSE\n";
+	vector<string> course_list;
+	course_list = app->GetCourselist();
+	cout << ">> List Of Course\n";
+	for (int i = 0; i < course_list.size(); ++i) {
+		cout << i + 1 << ". " << course_list[i] << "\n";
+	}
+	cout << "\n";
+	cout << "[OK] View List Course OK\n";
 
-int main() {
+	cout << "\n";
+	cout << "### TEST VIEW LIST STUDENT\n";
+	int id = getInt("Index Course");
+
+	vector<Student> students_list;
+
+	students_list = app->GetStudentListFromCourse(course_list[id - 1]);
+	cout << ">> List Student Of Course " << course_list[id - 1] << "\n";
+	cout << "\n";
+
+	cout << setw(12) << left << "ID" << setw(25) << left <<  "Full Name" << setw(9) << left << "Gender" <<
+	setw(15) << left << "Day Of Birth" << setw(25) << left << "Email" << "\n";
+	cout << setfill('-') << setw(80) << "-" << "\n";
+	cout << setfill(' ');
+	for (int i = 0; i < students_list.size(); ++i) {
+		cout << setw(12) << left << students_list[i].ID;
+		cout << setw(25) << left << Helper::GetFullName(students_list[i].first_name, students_list[i].last_name);
+		cout << setw(9) << left << students_list[i].gender;
+		cout << setw(15) << left << students_list[i].dob;
+		cout << setw(25) << left << students_list[i].email;
+		cout << "\n";
+	}
+	cout << setfill('-') << setw(80) << "-" << "\n";
+	cout << setfill(' ');
+	cout << "\n";
+	cout << "[OK] View List Student OK\n";
 	
-	// TestLogin();
-	// TestImportClass();
-	// TestAddNewStudentToClass();
-	// TestChangeStudent();
-	// TestRemoveStudentFromClass();
-	// TestEditStudentFromClass();
-	// TestViewListClass();
-	// TestGetCSVFile();
-	// TestImportCourse();
-	// TestAddNewCourse();
-	// TestAddStudentToCourse();
-	TestRemoveStudentFromCourse();
+	cout << "\n";
+	cout << "### TEST VIEW ATTENDANCE LIST\n";
+
+	id = getInt("Index Coures");
+	vector<Attendance> Attendance_list;
+
+	Attendance_list = app->GetAttendanceList(course_list[id - 1]);
+
+	cout << ">> Attendance List Of Course " << course_list[id - 1] << "\n";
+	cout << "\n";
+
+	cout << setw(12) << left << "ID" << setw(25) << left <<  "Full Name";
+	for (int i = 0; i < 10; ++i) {
+		string week = "";
+		if (i < 9) week = "Week-0" + std::to_string(i); else week = "Week-10";
+		cout << setw(10) << left << week;
+	}
+	cout << "\n";
+	cout << setfill('-') << setw(135) << "-" << "\n";
+	cout << setfill(' ');
+	for (int i = 0; i < Attendance_list.size(); ++i) {
+		cout << setw(12) << left << Attendance_list[i].ID;
+		cout << setw(25) << left << Helper::GetFullName(Attendance_list[i].first_name, Attendance_list[i].last_name);
+		for (int k = 0; k < Attendance_list[i].week.size(); k++)
+		{
+			string tmp = std::to_string(Attendance_list[i].week[k]) + "/2";
+			cout << setw(10) << left << tmp;
+		}
+		cout << "\n";
+	}
+	cout << setfill('-') << setw(135) << "-" << "\n";
+	cout << setfill(' ');
+}
+
+
+void Notyet() {
+	cout << "Feature Will Coming Soon...\n";
+}
+int main() {
+	vector<pair<int, string>> menu;
+	menu.push_back(make_pair(1, "Login"));
+	menu.push_back(make_pair(6, "Import Class"));
+	menu.push_back(make_pair(7, "Add New Student To Class"));
+	menu.push_back(make_pair(8, "Edit Student From Class"));
+	menu.push_back(make_pair(9, "Remove Student From Class"));
+	menu.push_back(make_pair(10, "Change Student Between Two Class"));
+	menu.push_back(make_pair(11, "View List Class"));
+	menu.push_back(make_pair(12, "View List Of Student In A Class"));
+	menu.push_back(make_pair(14, "Import Course"));
+	menu.push_back(make_pair(15, "Add New Course"));
+	menu.push_back(make_pair(18, "Remove Student From Course"));
+	menu.push_back(make_pair(19, "Add Student To Course"));
+	menu.push_back(make_pair(20, "View Course List"));
+	menu.push_back(make_pair(21, "View List Of Student In A Course"));
+	menu.push_back(make_pair(22, "View Attendance List Of A Course"));
+
+	cout << "          DEMO SMSys\n\n";
+	for (int i = 0; i < menu.size(); ++i) {
+		cout << menu[i].first << ". " << menu[i].second << "\n";
+	}
+
+	cout << "\n";
+
+	int opt = getInt("Enter Index Feature Wanna Test");
+	cout << "\n";
+	switch(opt) {
+		case 1:
+			TestLogin();
+			break;
+		case 2:
+		case 3:
+		case 4:
+			Notyet();
+			break;
+		case 5:
+			// TestLogout();
+			break;
+		case 6:
+			TestImportClass();
+			break;
+		case 7:
+			TestAddNewStudentToClass();
+			break;
+		case 8:
+			TestEditStudentFromClass();
+			break;
+		case 9:
+			TestRemoveStudentFromClass();
+			break;
+		case 10:
+			TestChangeStudent();
+			break;
+		case 11:
+		case 12:
+			TestViewListClass();
+			break;
+		case 13:
+			Notyet();
+		case 14:
+			TestImportCourse();
+			break;
+		case 15:
+			TestAddNewCourse();
+			break;
+		case 16:
+			Notyet();
+			break;
+		case 17:
+			Notyet();
+			break;
+		case 18:
+			TestRemoveStudentFromCourse();
+			break;
+		case 19:
+			TestAddStudentToCourse();
+			break;
+		case 20:
+		case 21:
+		case 22:
+			TestViewCourseList();
+			break;
+		default:
+			Notyet();
+			break;
+	}
 }

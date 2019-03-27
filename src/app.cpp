@@ -160,3 +160,29 @@ vector<string> App::GetCsvForCourse() {
 
 	return lists;
 }
+
+
+vector<string> App::GetCourselist() {
+	vector<string> courses_list;
+
+	courses_list = staff->GetCourselist();
+
+	return courses_list;
+}
+
+
+vector<Student> App::GetStudentListFromCourse(string &course_name) {
+	vector<Student> students_list;
+
+	students_list = staff->GetStudentListFromCourse(course_name);
+
+	return students_list;
+}
+
+vector<Attendance> App::GetAttendanceList(string &course_name) {
+	vector<Attendance> Attendance_list;
+
+	Attendance_list = staff->GetAttendanceList(course_name);
+
+	return Attendance_list;
+}

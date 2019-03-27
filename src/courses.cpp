@@ -102,12 +102,13 @@ bool Courses::ImportCourse(const string &course_id, const string &csv_name) {
     }
     fo.close();
 
-    // Save student info And init scoreboard
+    // Save student info And init scoreboard && attendance
     class_name = Helper::StringToUpper(class_name);
     fi.open(Path::CLASS + class_name + "/student.txt");
     if (fi.is_open()) {
         fo.open(path_to_course_dir + "/student_info.txt");
         ofstream fo_score(path_to_course_dir + "/scoreboard.txt");
+        ofstream fo_attendance(path_to_course_dir + "/attendance.txt");
         string id, first_name, last_name, line;
         while (!fi.eof()) {
             getline(fi, id, ' ');
@@ -116,10 +117,12 @@ bool Courses::ImportCourse(const string &course_id, const string &csv_name) {
             getline(fi, last_name, ' ');
             getline(fi, line);
             fo << id << " " << first_name << " "<< last_name << " " << line << "\n";
-            fo_score << id << " " << first_name << " " << last_name << " " << "0 0 0 0 NULL 0\n"; 
+            fo_score << id << " " << first_name << " " << last_name << " " << "0 0 0 0 NULL 0\n";
+            fo_attendance << id << " " << first_name << " " << last_name << " " << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
         }
         fo.close();
         fo_score.close();
+        fo_attendance.close();
     }
     fi.close();
 
@@ -210,6 +213,10 @@ bool Courses::AddStudentToCourse(const string & course_id, const int student_id)
 	fout.open(SBoardPath, ios::app);
 	fout << NewStudent.ID << " " << NewStudent.first_name << " " << NewStudent.last_name << " 0 0 0 0 NULL 0\n";
 	fout.close();
+    // Add to Attendance, attendace.txt
+    fout.open(Path::COURSE + COURSE_ID + "/attendance.txt", ios::app);
+    fout << NewStudent.ID << " " << NewStudent.first_name << " " << NewStudent.last_name << " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
+    fout.close(); 
     // Add to Student List, student_info.txt
 	fout.open(SInfoPath, ios::app);
 	fout << NewStudent.ID << " " << NewStudent.first_name << " " << NewStudent.last_name << " " << NewStudent.gender << " " << NewStudent.dob << " " << NewStudent.email << "\n";
@@ -275,6 +282,29 @@ bool Courses::RemoveStudentFromCourse(const string & course_id, const int del_st
 	fout.close();
 	ScoreList.clear();
 
+    // Get from attendance, attendance.txt
+    vector<string> AttenList;
+    fin.open(Path::COURSE + COURSE_ID + "/attendance.txt");
+    string line;
+    while (getline(fin, line)) {
+        if (line == "") break;
+        int id = 0;
+        for (int i = 0; i < line.length(); ++i) {
+            if (line[i] == ' ') break;
+            id = id * 10 + line[i] - '0';
+        }
+        if (id != del_student) {
+            AttenList.push_back(line);
+        }
+    }
+    fin.close();
+    
+    fout.open(Path::COURSE + COURSE_ID + "/attendance.txt");
+    for (int i = 0; i < AttenList.size(); ++i) {
+        fout << AttenList[i] << "\n";
+    }
+    fout.close();
+    AttenList.clear();
     return true;
 }
 

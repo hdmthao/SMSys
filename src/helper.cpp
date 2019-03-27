@@ -116,6 +116,47 @@ Student Helper::stringToStudent(string a, string classname)
 	}
 }
 
+Attendance Helper::stringToAttendance(string a) {
+
+	if (!a.empty())
+	{
+		Attendance x;
+		string ID;
+		int count = 0;
+		for (int i = 0; i < a.length(); i++)
+		{
+			if (a.at(i) == ' ') count++;
+			else
+			{
+				if (count == 0) ID.push_back(a.at(i));
+				if (count == 1) x.first_name.push_back(a.at(i));
+				if (count == 2) x.last_name.push_back(a.at(i));
+				if (count >= 3)
+				{
+					if (a.at(i) == '1') x.week.push_back(1);
+					if (a.at(i) == '0') x.week.push_back(0);
+				}
+			}
+		}
+		Attendance result;
+		for (int i = 0; i < 20; i += 2)
+		{
+			result.week.push_back(x.week.at(i) + x.week.at(i + 1));
+		}
+		result.ID = stoi(ID);
+		result.first_name = x.first_name;
+		result.last_name = x.last_name;
+		ConvertStringToSpace(result.last_name);
+		return result;
+	}
+	else
+	{
+		Attendance x;
+		x.ID = 0;
+		return x;
+	}
+}
+
 
 void Helper::GetFileInFolder(vector<string> &lists, string &path) {
     DIR* dir;
@@ -128,4 +169,9 @@ void Helper::GetFileInFolder(vector<string> &lists, string &path) {
         lists.push_back(s);
     }
     closedir(dir);
+}
+
+
+string Helper::GetFullName(const string &first_name, const string &last_name) {
+    return last_name + " " + first_name;
 }
