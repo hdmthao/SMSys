@@ -1,5 +1,6 @@
 #if defined(_WIN32) || defined(WIN32)
     #include <windows.h>
+    #include <dirent.h>
 #else
     #include <sys/types.h>
     #include <sys/stat.h>
