@@ -34,11 +34,12 @@ void TestLogin() {
 	cout << "### TEST LOGIN\n";
 	string userName = getString("Ten Dang nhap");
 	string password = getString("Mat Khau");
-	
+
 	cout << "\n";
 	if (app->Login(userName, password)) {
 		cout << "[OK] Login OK\n";
-	} else {
+	}
+	else {
 		cout << "[X]  Login FAIL\n";
 	}
 
@@ -52,13 +53,14 @@ void TestImportClass() {
 	cout << "\n";
 	if (app->ImportClass(new_class_name, csv_name)) {
 		cout << "[OK] Import OK\n";
-	} else {
+	}
+	else {
 		cout << "[X]  Import FAIL\n";
 	}
 }
 
-void TestAddNewStudentToClass() {
-	cout << "### TEST ADD NEW STUDENT TO CLASS\n";
+void TestAddNewStudent() {
+	cout << "### TEST ADD NEW STUDENT\n";
 	Student new_student;
 	string class_name = getString("Lop Muon Add");
 	new_student.ID = getInt("ID");
@@ -69,9 +71,10 @@ void TestAddNewStudentToClass() {
 
 	cout << "\n";
 
-	if (app->AddNewStudentToClass(class_name, new_student)) {
+	if (app->AddNewStudent(class_name, new_student)) {
 		cout << "[OK] Add OK\n";
-	} else {
+	}
+	else {
 		cout << "[X]  Add FAIL\n";
 	}
 }
@@ -86,33 +89,36 @@ void TestChangeStudent() {
 	cout << "\n";
 	if (app->ChangeStudentFromClassAToB(id, class_b)) {
 		cout << "[OK] Change OK\n";
-	} else {
+	}
+	else {
 		cout << "[X]  Change FAIL\n";
 	}
 }
 
-void TestRemoveStudentFromClass() {
-	cout << "### TEST REMOVE STUDENT FROM CLASS\n";
+void TestRemoveStudent() {
+	cout << "### TEST REMOVE STUDENT\n";
 	int id;
 	id = getInt("Remove ID");
 	cout << "\n";
-	if (app->RemoveStudentFromClass(id)) {
+	if (app->RemoveStudent(id)) {
 		cout << ">> Remove OK\n";
-	} else {
+	}
+	else {
 		cout << ">> Remove FAIL\n";
 	}
 }
 
-void TestEditStudentFromClass() {
+void TestEditStudent() {
 	cout << "### TEST EDIT STUDENT\n";
 	Student student;
 	int id = getInt("id");
 	student = app->GetStudent(id);
-	
+
 	cout << "\n";
-	if (app->EditStudentFromClass(student)) {
+	if (app->EditStudent(student)) {
 		cout << ">> Edit OK\n";
-	} else {
+	}
+	else {
 		cout << ">> Edit Fail\n";
 	}
 }
@@ -122,7 +128,7 @@ void TestViewListClass() {
 	vector<string> class_list;
 	class_list = app->GetClassList();
 	for (int i = 0; i < class_list.size(); ++i) {
-		cout <<i + 1 << ". " << class_list[i] << "\n";
+		cout << i + 1 << ". " << class_list[i] << "\n";
 	}
 	cout << "\n";
 	cout << "[OK] View List Class OK\n";
@@ -133,7 +139,7 @@ void TestViewListClass() {
 	int id = getInt("Index Class");
 	vector<Student> students_list;
 
-	students_list = app->GetStudentListFromClass(class_list[id - 1]);
+	students_list = app->GetStudentList(class_list[id - 1]);
 	cout << ">> List Student Of Class " << class_list[id - 1] << "\n";
 	for (int i = 0; i < students_list.size(); ++i) {
 		cout << students_list[i].ID << " " << students_list[i].first_name << " " << students_list[i].last_name << " " <<
@@ -177,86 +183,71 @@ void TestImportCourse() {
 
 	if (app->ImportCourse(course_id, csv_name)) {
 		cout << "[OK] Import Course OK\n";
-	} else {
+	}
+	else {
 		cout << "[X]  Import Course FAIL\n";
 	}
 }
 
-void TestAddNewCourse() {
-	cout << "### TEST ADD NEW COURSE\n";
+void TestViewCourseList()
+{
+	cout << "### TEST VIEW LIST CLASS\n";
+	vector<string> course_list;
+	course_list = app->GetCourselist();
+	for (int i = 0; i < course_list.size(); ++i) {
+		cout << i + 1 << ". " << course_list[i] << "\n";
+	}
+	cout << "\n";
+	cout << "[OK] View List Class OK\n";
 
-	Course new_course;
-	new_course.ID = getString("Course ID");
-	new_course.name = getString("name");
-	new_course.lecturer = getString("lecture");
-	string class_name = getString("class name");
-	new_course.start_date = getString("start date");
-	new_course.end_date = getString("end date");
+	cout << "\n";
+	cout << "### TEST VIEW LIST STUDENT\n";
 
-	int number_period = getInt("number priod");
-	Period period_1, period_2;
-	period_1.dow = getInt("Day of week of period 1");
-	period_1.shift = getInt("Shift of period 1");
-	period_1.room = getString("Room of period 1");
-	if (number_period == 2) {
-		period_2.dow = getInt("Day of week of period 2");
-		period_2.shift = getInt("Shift of period 2");
-		period_2.room = getString("Room of period 2");
+	int id = getInt("Index Course");
+	vector<Student> students_list;
+
+	students_list = app->GetStudentListofCourse(course_list[id - 1]);
+	cout << ">> List Student Of Class " << course_list[id - 1] << "\n";
+	for (int i = 0; i < students_list.size(); ++i) {
+		cout << students_list[i].ID << " " << students_list[i].first_name << " " << students_list[i].last_name << " " <<
+			students_list[i].gender << " " << students_list[i].dob << " " << students_list[i].email << "\n";
 	}
 
 	cout << "\n";
+	cout << "[OK] View List Student OK\n";
 
-	if (app->AddNewCourse(new_course, class_name, number_period, period_1, period_2)) {
-		cout << "[OK] Add New Course OK\n";
-	} else {
-		cout << "[X]  Add New Course FAIL\n";
-	}
-}
+	cout << "### TEST VIEW ATTENDANCE LIST\n";
 
-void TestAddStudentToCourse() {
-	cout << "### TEST ADD STUDENT TO COURSE\n";
+	id = getInt("Index Course");
+	vector<Attendance> Attendance_list;
 
-	int student_id = getInt("student id");
-	string course_id = getString("course id");
+	Attendance_list = app->GetAttendanceList(course_list[id - 1]);
+	cout << ">> Attendance List Of Course " << course_list[id - 1] << "\n";
+	for (int i = 0; i < Attendance_list.size(); ++i) {
+		cout << Attendance_list[i].StudentID << ": \n";
+		cout << "Week \n";
+		for (int k = 0; k < Attendance_list[i].week.size(); k++)
+		{
+			cout << k + 1 << ". ";
+			cout << Attendance_list[i].week[k];
+			cout << "\n";
+		}
 
-	if (app->AddStudentToCourse(course_id, student_id)) {
-		cout << ">> Add student id " << student_id << " to course " << course_id << "\n";
-	} else {
-		cout << ">> Student not existed or existed in course\n";
 	}
 	cout << "\n";
-	cout << "[OK] Add Student To Course OK\n";
+	system("pause");
 }
-
-void TestRemoveStudentFromCourse() {
-	cout << "TEST REMOVE STUDENT FROM COURSE\n";
-
-	string course_id = getString("Coures ID");
-	int del_student = getInt("Student ID");
-
-	if (app->RemoveStudentFromCourse(course_id, del_student)) {
-		cout << ">> Remove stunde id " << del_student << " from course " << course_id << "\n";
-	} else {
-		cout << ">> Student not existed\n";
-	}
-
-	cout << "\n";
-	cout << "[OK] Remove Student From Course OK\n";
-}
-
 
 int main() {
-	
+
 	// TestLogin();
 	// TestImportClass();
-	// TestAddNewStudentToClass();
+	// TestAddNewStudent();
 	// TestChangeStudent();
-	// TestRemoveStudentFromClass();
-	// TestEditStudentFromClass();
+	// TestRemoveStudent();
+	// TestEditStudent();
 	// TestViewListClass();
 	// TestGetCSVFile();
-	// TestImportCourse();
-	// TestAddNewCourse();
-	// TestAddStudentToCourse();
-	TestRemoveStudentFromCourse();
+	//TestImportCourse();
+	TestViewCourseList();
 }

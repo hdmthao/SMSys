@@ -47,10 +47,10 @@ bool App::ImportClass(const string &class_name, const string &csv_name) {
 }
 
 
-bool App::AddNewStudentToClass(const string &class_name, Student &new_student) {
+bool App::AddNewStudent(const string &class_name, Student &new_student) {
 	bool add_status = false;
 
-	add_status = staff->AddNewStudentToClass(class_name, new_student);
+	add_status = staff->AddNewStudent(class_name, new_student);
 
 	return add_status;
 }
@@ -65,19 +65,19 @@ bool App::ChangeStudentFromClassAToB(const int &id, string &class_b) {
 }
 
 
-bool App::RemoveStudentFromClass(const int &ID) {
+bool App::RemoveStudent(const int &ID) {
 	bool remove_status = false;
 
-	remove_status = staff->RemoveStudentFromClass(ID);
+	remove_status = staff->RemoveStudent(ID);
 
 	return remove_status;
 }
 
 
-bool App::EditStudentFromClass(Student &student) {
+bool App::EditStudent(Student &student) {
 	bool edit_status = false;
 
-	edit_status = staff->EditStudentFromClass(student);
+	edit_status = staff->EditStudent(student);
 
 	return edit_status;
 }
@@ -99,10 +99,10 @@ vector<string> App::GetClassList() {
 }
 
 
-vector<Student> App::GetStudentListFromClass(string &class_name) {
+vector<Student> App::GetStudentList(string &class_name) {
 	vector<Student> students_list;
 	
-	students_list = staff->GetStudentListFromClass(class_name);
+	students_list = staff->GetStudentList(class_name);
 	
 	return students_list;
 }
@@ -126,37 +126,32 @@ bool App::ImportCourse(const string &course_id, const string &csv_name) {
 }
 
 
-bool App::AddNewCourse(Course &new_course, string &class_name, int number_period, Period &period_1, Period &period_2) {
-	bool add_status;
-
-	add_status = courses->AddNewCourse(new_course, class_name, number_period, period_1, period_2);
-
-	return add_status;
-}
-
-
-bool App::AddStudentToCourse(const string &course_id, int student_id) {
-	bool add_status = false;
-
-	add_status = courses->AddStudentToCourse(course_id, student_id);
-
-	return add_status;
-}
-
-
-bool App::RemoveStudentFromCourse(const string &course_id, int del_student) {
-	bool remove_status = false;
-
-	remove_status = courses->RemoveStudentFromCourse(course_id, del_student);
-
-	return remove_status;
-}
-
-
 vector<string> App::GetCsvForCourse() {
 	vector<string> lists;
 
 	lists = staff->GetCsvForCourse();
 
 	return lists;
+}
+vector<string> App::GetCourselist()
+{
+	vector<string> courses_list;
+
+	courses_list = staff->GetCourselist();
+
+	return courses_list;
+}
+vector<Student> App::GetStudentListofCourse(string &course_name)
+{
+	vector<Student> students_list;
+	students_list = staff->GetStudentListofCourse(course_name);
+	return students_list;
+}
+
+vector<Attendance> App::GetAttendanceList(string &course_name)
+{
+	vector<Attendance> Attendance_list;
+
+	Attendance_list = staff->GetAttendanceList(course_name);
+	return Attendance_list;
 }

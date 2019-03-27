@@ -4,6 +4,7 @@
 #include <string>
 #include "data_student.h"
 #include "data_account.h"
+#include "data_Attendance.h"
 
 #include <vector>
 
@@ -23,5 +24,7 @@ public:
     static UserRole FormatIntToRole(int &role);
     static Student stringToStudent(string a, string classname);
     static void GetFileInFolder(vector<string> &lists, string &path);
+	static Attendance stringToAttendance(string a);
+
 };
 #endif

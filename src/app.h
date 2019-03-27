@@ -25,23 +25,23 @@ public:
 	bool Login(string userName, string passWord);
 	bool Logout();
 
-	// Staff -> Class
+	//Staff
 	bool ImportClass(const string &class_name, const string &csv_name);
-	bool AddNewStudentToClass(const string &class_name, Student &new_student);
+	bool AddNewStudent(const string &class_name, Student &new_student);
 	bool ChangeStudentFromClassAToB(const int &id, string &class_b);
-	bool RemoveStudentFromClass(const int &ID);
-	bool EditStudentFromClass(Student &student);
+	bool RemoveStudent(const int &ID);
+	bool EditStudent(Student &student);
 	Student GetStudent(const int &id);
 	vector<string> GetClassList();
-	vector<Student> GetStudentListFromClass(string &class_name);
+	vector<Student> GetStudentList(string &class_name);
 	vector<string> GetCsvForClass();
 	vector<string> GetCsvForCourse();
+	vector<string> GetCourselist();
+	vector<Student> GetStudentListofCourse(string &course_name);
+	vector<Attendance> GetAttendanceList(string &course_name);
 
-	// Staff -> course
+	//Courses
 	bool ImportCourse(const string &course_id, const string &csv_name);
-	bool AddNewCourse(Course &new_course, string &class_name, int number_period, Period &period_1, Period &period_2);
-	bool AddStudentToCourse(const string &course_id, int student_id);
-	bool RemoveStudentFromCourse(const string &course_id, int student_id);
 };
 
 #endif
