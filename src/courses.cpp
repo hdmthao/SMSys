@@ -224,6 +224,23 @@ bool Courses::AddStudentToCourse(const string & course_id, const int student_id)
 	return true;
 }
 
+bool Courses::EditCourse(Course &course) {
+    Helper::UpperFirstCharOfLetter(course.name);
+    Helper::ConvertStringToDash(course.name);
+    Helper::FormatDay(course.start_date);
+    Helper::FormatDay(course.end_date);
+
+    string path_to_course = Path::COURSE + course.ID + "/course_info.txt";
+    cout << path_to_course << "\n";
+    ofstream fo(path_to_course);
+
+    fo << course.ID << " " << course.name << " " << course.lecturer << " " << course.start_date << " " << course.end_date;
+    
+    fo.close();
+    return true;
+}
+
+
 bool Courses::RemoveStudentFromCourse(const string & course_id, const int del_student){
     const string COURSE_ID  = Helper::StringToUpper(course_id);
 	string SBoardPath = Path::COURSE + COURSE_ID + "/scoreboard.txt";
@@ -308,6 +325,31 @@ bool Courses::RemoveStudentFromCourse(const string & course_id, const int del_st
     return true;
 }
 
+
+bool Courses::RemoveCourse(string &course_id) {
+    course_id = Helper::StringToUpper(course_id);
+
+    if (!ExistedCourse(course_id)) {
+        return false;
+    }
+
+    vector<string> course_list = GetCourselist();
+
+    ofstream fo(Path::COURSES_LIST);
+    for (int i = 0; i < course_list.size(); ++i) {
+        if (course_list[i] != course_id) {
+            cout << course_list[i] << "\n";
+        }
+    }
+    fo.close();
+    course_list.clear();
+
+    Helper::RemoveDir(course_id);
+
+    return true;
+}
+
+
 bool Courses::ExistedCourse(const string &course_id) {
     ifstream fi(Path::COURSES_LIST);
     if (!fi.is_open()) {
@@ -331,4 +373,15 @@ void Courses::AddNewCourseToDatabase(const string &course_id) {
     fo << course_id << "\n";
 
     fo.close();
+}
+
+
+Course Courses::GetCourseInfo(string &course_id) {
+    Course course;
+
+    ifstream fi(Path::COURSE + course_id + "/course_info.txt");
+    fi >> course.ID >> course.name >> course.lecturer >> course.start_date >> course.end_date;
+    fi.close();
+    Helper::ConvertStringToSpace(course.name);
+    return course;
 }

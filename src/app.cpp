@@ -144,6 +144,31 @@ bool App::AddStudentToCourse(const string &course_id, int student_id) {
 }
 
 
+bool App::EditCourse(Course &course) {
+	bool edit_status = false;
+
+	edit_status = courses->EditCourse(course);
+
+	return edit_status;
+}
+
+
+Course App::GetCourseInfo(string &course_id) {
+	Course course;
+
+	course = courses->GetCourseInfo(course_id);
+
+	return course;
+}
+bool App::RemoveCourse(string &course_id) {
+	bool remove_status = false;
+
+	remove_status = courses->RemoveCourse(course_id);
+
+	return remove_status;
+}
+
+
 bool App::RemoveStudentFromCourse(const string &course_id, int del_student) {
 	bool remove_status = false;
 

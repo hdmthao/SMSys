@@ -26,7 +26,9 @@ public:
     bool AddNewCourse(Course &new_course, string &class_name, int number_period, Period &period_1, Period &period_2);
     bool AddStudentToCourse(const string &course_id, const int student_id);
 	bool RemoveStudentFromCourse(const string &course_id, const int student_id);
-
+    bool RemoveCourse(string &course_id);
+    bool EditCourse(Course &course);
+    Course GetCourseInfo(string &course_id);
 };
 
 #endif

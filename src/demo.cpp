@@ -52,12 +52,19 @@ void TestLogin() {
 }
 
 void TestImportClass() {
-	cout << "### TEST IMPORT CLASS\n";
+	cout << "### TEST IMPORT CLASS\n\n";
+
+	vector<string> list_import = app->GetCsvForClass();
+	cout << "List Of CSV file\n";
+	for (int i = 0; i < list_import.size(); ++i) {
+		cout << i + 1 << ". " << list_import[i] << "\n";
+	}
+	cout << "\n";
+	int id = getInt("Index CSV file you wanna import");
 	string new_class_name = getString("Ten Lop Moi");
-	string csv_name = "18CTT1-Students.csv";
 
 	cout << "\n";
-	if (app->ImportClass(new_class_name, csv_name)) {
+	if (app->ImportClass(new_class_name, list_import[id - 1])) {
 		cout << "[OK] Import OK\n";
 	} else {
 		cout << "[X]  Import FAIL\n";
@@ -188,12 +195,18 @@ void TestGetCSVFile() {
 void TestImportCourse() {
 	cout << "### TEST IMPORT COURSE\n";
 
-	string course_id = getString("Course ID");
-	string  csv_name = "CS162.csv";
+	// string  csv_name = "CS162.csv";
+	vector<string> list_import = app->GetCsvForCourse();
 
+	cout << "List Of CSV file\n";
+	for (int i = 0; i < list_import.size(); ++i) {
+		cout << i + 1 << ". " << list_import[i] << "\n";
+	}
 	cout << "\n";
+	int id = getInt("Index CSV file you wanna import");
+	string course_id = getString("Course ID");
 
-	if (app->ImportCourse(course_id, csv_name)) {
+	if (app->ImportCourse(course_id, list_import[id - 1])) {
 		cout << "[OK] Import Course OK\n";
 	} else {
 		cout << "[X]  Import Course FAIL\n";
@@ -335,9 +348,76 @@ void TestViewCourseList() {
 }
 
 
+void TestRemoveCourse() {
+	cout << "### TEST REMOVE COURSE\n";
+
+	vector<string> course_list;
+	course_list = app->GetCourselist();
+	cout << ">> List Of Course\n";
+	for (int i = 0; i < course_list.size(); ++i) {
+		cout << i + 1 << ". " << course_list[i] << "\n";
+	}
+	cout << "\n";
+
+	int id = getInt("Index Course Wanna Remove");
+
+	if (app->RemoveCourse(course_list[id - 1])) {
+		cout << ">> Remove Course " << course_list[id - 1] << " OK\n";
+	} else {
+		cout << ">> Remove Course " << course_list[id - 1] << " FAILD\n";
+	}
+
+	cout << "\n";
+	cout << "[OK] REMOVE COURSE OK\n";
+}
+
+
+void TestEditCourses() {
+	cout << "### TEST EDIT COURSE\n";
+
+	vector<string> course_list;
+	course_list = app->GetCourselist();
+	cout << ">> List Of Course\n";
+	for (int i = 0; i < course_list.size(); ++i) {
+		cout << i + 1 << ". " << course_list[i] << "\n";
+	}
+	cout << "\n";
+
+	int id = getInt("Index Course Wanna edit");
+	Course course = app->GetCourseInfo(course_list[id - 1]);
+	cout << "\n";
+	cout << "Course Info\n";
+	cout << course.ID << " " << course.name << " " << course.lecturer << " " << course.start_date << " " << course.end_date << "\n\n";
+	int option = getInt("Do you want edit name of course (\'yes\' enter 1, \'no\' enter 0)");
+	if (option) {
+		course.name = getString("New course name");
+	}
+
+	option = getInt("Do you want edit start date of course");
+	if (option) {
+		course.start_date = getString("New start date");
+	}
+
+	option = getInt("Do you want edit end date of course");
+	if (option) {
+		course.end_date = getString("New end date");
+	}
+
+	if (app->EditCourse(course)) {
+		cout << ">> Edit course OK\n";
+	} else {
+		cout << ">> Edit course Fail\n";
+	}
+
+	cout << "\n";
+	cout << "[OK] Test Edit Course OK\n";
+}
+
+
 void Notyet() {
 	cout << "Feature Will Coming Soon...\n";
 }
+
 int main() {
 	vector<pair<int, string>> menu;
 	menu.push_back(make_pair(1, "Login"));
@@ -350,21 +430,25 @@ int main() {
 	menu.push_back(make_pair(12, "View List Of Student In A Class"));
 	menu.push_back(make_pair(14, "Import Course"));
 	menu.push_back(make_pair(15, "Add New Course"));
+	menu.push_back(make_pair(16, "Edit Course"));
+	menu.push_back(make_pair(17, "Remove Course"));
 	menu.push_back(make_pair(18, "Remove Student From Course"));
 	menu.push_back(make_pair(19, "Add Student To Course"));
 	menu.push_back(make_pair(20, "View Course List"));
 	menu.push_back(make_pair(21, "View List Of Student In A Course"));
 	menu.push_back(make_pair(22, "View Attendance List Of A Course"));
 
+	while (1) {
 	cout << "          DEMO SMSys\n\n";
 	for (int i = 0; i < menu.size(); ++i) {
 		cout << menu[i].first << ". " << menu[i].second << "\n";
 	}
-
+	cout << 0 << ". EXIT\n";
 	cout << "\n";
 
 	int opt = getInt("Enter Index Feature Wanna Test");
 	cout << "\n";
+	if (opt == 0) break;
 	switch(opt) {
 		case 1:
 			TestLogin();
@@ -405,10 +489,10 @@ int main() {
 			TestAddNewCourse();
 			break;
 		case 16:
-			Notyet();
+			TestEditCourses();
 			break;
 		case 17:
-			Notyet();
+			TestRemoveCourse();
 			break;
 		case 18:
 			TestRemoveStudentFromCourse();
@@ -424,5 +508,6 @@ int main() {
 		default:
 			Notyet();
 			break;
+	}
 	}
 }

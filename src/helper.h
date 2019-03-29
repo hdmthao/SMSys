@@ -18,6 +18,7 @@ public:
     static void ConvertStringToDash(string &);
     static void ConvertStringToSpace(string &);
     static void MakeDir(const string &);
+    static void RemoveDir(const string &);
     static void NormalizeStudent(Student &student);
     static void UpperFirstCharOfLetter(string &str);
     static void FormatDay(string &str);

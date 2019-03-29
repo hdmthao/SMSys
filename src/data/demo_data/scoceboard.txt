@@ -1,9 +1,0 @@
-18125006 Dung Pham-Le-Thuy 10 10 1 10 A+ 10
-18125007 Duy Vu-Tran 10 10 1 10 A+ 10
-18125017 Phong La-Hoang 10 10 1 10 A+ 10
-18125025 Thien Nguyen-Manh 10 10 1 10 A+ 10
-18125037 Khoa Nguyen-Ngoc-Anh 10 10 1 10 A+ 10
-18125043 San Cao-The 10 10 1 10 A+ 10
-18125046 Ro Nguyen-E 10 10 1 10 A+ 10
-18125049 Hieu Huynh-Minh 10 10 1 10 A+ 10
-18125095 Thao Ha-Duc-Minh 10 10 1 10 A+ 10

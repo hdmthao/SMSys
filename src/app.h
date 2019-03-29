@@ -41,7 +41,10 @@ public:
 	bool ImportCourse(const string &course_id, const string &csv_name);
 	bool AddNewCourse(Course &new_course, string &class_name, int number_period, Period &period_1, Period &period_2);
 	bool AddStudentToCourse(const string &course_id, int student_id);
+	bool EditCourse(Course &course);
+	Course GetCourseInfo(string &course_id);
 	bool RemoveStudentFromCourse(const string &course_id, int student_id);
+	bool RemoveCourse(string &course_id);
 	vector<string> GetCourselist();
 	vector<Student> GetStudentListFromCourse(string &course_name);
 	vector<Attendance> GetAttendanceList(string &course_name);

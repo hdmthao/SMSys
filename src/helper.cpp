@@ -8,6 +8,9 @@
 #endif
 
 #include "helper.h"
+#include "path.h"
+#include <string.h>
+#include <iostream>
 
 string Helper::StringToUpper(const string &str) {
     string new_string = str;
@@ -39,6 +42,29 @@ void Helper::MakeDir(const string &new_dir) {
     #else
         mkdir(new_dir.c_str(), 0733);
     #endif
+}
+
+
+void Helper::RemoveDir(const string &dir_name) {
+	DIR* dir;
+	struct dirent* str;
+	string path_to_dir = Path::COURSE + dir_name + "/";
+
+	dir = opendir(path_to_dir.c_str());
+	while ((str = readdir(dir)) != nullptr) {
+		// just . && ..
+		if (strcmp(str->d_name, ".") == 0 || strcmp(str->d_name, "..") == 0) continue;
+		string path = path_to_dir;
+		path += string(str->d_name);
+		struct stat s;
+		stat(path.c_str(), &s);
+
+		if (s.st_mode & S_IFREG) {
+			path = path.substr(0, path.length());
+			remove(path.c_str());
+		}
+	}
+	remove(path_to_dir.c_str());
 }
 
 void Helper::NormalizeStudent(Student& student) {
