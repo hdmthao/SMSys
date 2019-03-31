@@ -117,10 +117,10 @@ vector<string> App::GetCsvForClass() {
 }
 
 
-bool App::ImportCourse(const string &course_id, const string &csv_name) {
+bool App::ImportCourse(const string &csv_name) {
 	bool import_status;
 	
-	import_status = courses->ImportCourse(course_id, csv_name);
+	import_status = courses->ImportCourse(csv_name);
 
 	return import_status;
 }
@@ -210,4 +210,31 @@ vector<Attendance> App::GetAttendanceList(string &course_name) {
 	Attendance_list = staff->GetAttendanceList(course_name);
 
 	return Attendance_list;
+}
+
+
+vector<string> App::SearchCourse(string &find_id) {
+	vector<string> course_list;
+
+	course_list = courses->SearchCourse(find_id);
+
+	return course_list;
+}
+
+
+bool App::ExportScoreboard(string &course_id) {
+	bool export_status;
+
+	export_status = courses->ExportScoreboard(course_id);
+
+	return export_status;
+}
+
+
+bool App::ExportAttendance(string &course_id) {
+	bool export_status;
+
+	export_status = courses->ExportAttendance(course_id);
+
+	return export_status;
 }

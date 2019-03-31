@@ -64,6 +64,7 @@ void Helper::RemoveDir(const string &dir_name) {
 			remove(path.c_str());
 		}
 	}
+	std::cout << path_to_dir << "\n";
 	remove(path_to_dir.c_str());
 }
 

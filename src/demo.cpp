@@ -193,24 +193,26 @@ void TestGetCSVFile() {
 }
 
 void TestImportCourse() {
-	cout << "### TEST IMPORT COURSE\n";
+	cout << "[RUN] TEST IMPORT COURSE\n\n";
 
-	// string  csv_name = "CS162.csv";
 	vector<string> list_import = app->GetCsvForCourse();
 
-	cout << "List Of CSV file\n";
+	cout << ">> List Of CSV file\n";
 	for (int i = 0; i < list_import.size(); ++i) {
 		cout << i + 1 << ". " << list_import[i] << "\n";
 	}
 	cout << "\n";
 	int id = getInt("Index CSV file you wanna import");
-	string course_id = getString("Course ID");
 
-	if (app->ImportCourse(course_id, list_import[id - 1])) {
+	if (app->ImportCourse(list_import[id - 1])) {
 		cout << "[OK] Import Course OK\n";
 	} else {
 		cout << "[X]  Import Course FAIL\n";
 	}
+	cout << "\n";
+	cout << "[DONE] TEST IMPORT COURSE\n";
+	cout << "Press Enter";
+	cin.ignore();
 }
 
 void TestAddNewCourse() {
@@ -414,8 +416,104 @@ void TestEditCourses() {
 }
 
 
+void TestSearchAndViewCourse() {
+	cout << "### TEST SEARCH AND VIEW COURSE\n\n";
+
+	string find_id = getString("Enter ID wanna search");
+
+	vector<string> course_list;
+
+	course_list = app->SearchCourse(find_id);
+
+	if (course_list.size() == 0) {
+		cout << "\n";
+		cout << "No Course Match!!!\n";
+	} else {
+		cout << ">> List Of Course Impossible\n";
+		for (int i = 0; i < course_list.size(); ++i) {
+			cout << i + 1 << ". " << course_list[i] << "\n";
+		}
+		cout << "\n";
+		int id = getInt("Select ID Wanna to view Scoreboard");
+		cout << "\n";
+	}
+
+	// view list scoreboard
+	cout << "\n";
+	cout << "[OK] Test Search and View Course OK\n";
+	cout << "PRESS ENTER";
+	cin.ignore();
+}
+
+
+void TestSearchAndViewAttendance() {
+
+}
+
+void TestExportScoreboard() {
+	cout << "[RUN] TEST EXPORT SCOREBOARD\n\n";
+
+	cout << ">> List of course\n\n";
+
+	vector<string> course_list;
+
+	course_list = app->GetCourselist();
+
+	if (course_list.size() == 0) {
+		cout << "No course to export scoreboard\n";
+	} else {
+		for (int i = 0; i < course_list.size(); ++i) {
+			cout << i + 1 << ". " << course_list[i] << "\n";
+		}
+		cout << "\n";
+		int id = getInt("Index course wanna export scoreboard");
+		if (app->ExportScoreboard(course_list[id - 1])) {
+			cout << ">> Export file save to \\export\\" << course_list[id - 1] << "_scoreboard.txt" << "\n";
+			cout << ">> Export scoreboard of course " << course_list[id - 1] << " OK\n";
+		} else {
+			cout << ">> Export FAIL!!!\n";
+		}
+	}
+	cout << "\n";
+	cout << "[DONE] TEST EXPORT SCOREBOARD\n";
+	cout << "Press Enter";
+	cin.ignore();
+}
+
+void TestExportAttendance() {
+	cout << "[RUN] TEST EXPORT ATTENDANCE\n\n";
+
+	cout << ">> List of course\n\n";
+
+	vector<string> course_list;
+
+	course_list = app->GetCourselist();
+
+	if (course_list.size() == 0) {
+		cout << "No course to export attendance\n";
+	} else {
+		for (int i = 0; i < course_list.size(); ++i) {
+			cout << i + 1 << ". " << course_list[i] << "\n";
+		}
+		cout << "\n";
+		int id = getInt("Index course wanna export attendance");
+		if (app->ExportAttendance(course_list[id - 1])) {
+			cout << ">> Export file save to \\export\\" << course_list[id - 1] << "_attendance.csv" << "\n";
+			cout << ">> Export attendace of course " << course_list[id - 1] << " OK\n";
+		} else {
+			cout << ">> Export FAIL!!!\n";
+		}
+	}
+	cout << "\n";
+	cout << "[DONE] TEST EXPORT ATTENDACNE\n";
+	cout << "Press Enter";
+	cin.ignore();
+}
+
 void Notyet() {
 	cout << "Feature Will Coming Soon...\n";
+	cout << "Press Enter";
+	cin.ignore();
 }
 
 int main() {
@@ -437,6 +535,10 @@ int main() {
 	menu.push_back(make_pair(20, "View Course List"));
 	menu.push_back(make_pair(21, "View List Of Student In A Course"));
 	menu.push_back(make_pair(22, "View Attendance List Of A Course"));
+	menu.push_back(make_pair(24, "Search and View Scoreboard of a course"));
+	menu.push_back(make_pair(25, "Export scoreboard"));
+	menu.push_back(make_pair(26, "Search and View Attendance of a course"));
+	menu.push_back(make_pair(27, "Export Attendance"));
 
 	while (1) {
 	cout << "          DEMO SMSys\n\n";
@@ -504,6 +606,18 @@ int main() {
 		case 21:
 		case 22:
 			TestViewCourseList();
+			break;
+		case 24:
+			TestSearchAndViewCourse();
+			break;
+		case 25:
+			TestExportScoreboard();
+			break;
+		case 26:
+			TestSearchAndViewAttendance();
+			break;
+		case 27:
+			TestExportAttendance();
 			break;
 		default:
 			Notyet();

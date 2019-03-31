@@ -33,3 +33,6 @@ string Path::COURSES_LIST = Path::COURSE + "courses_list.txt";
 // Path to folder save all csv file to import course
 const string Path::IMPORT_COURSE = "data/import/course/";
 
+// Path to folder save all export file
+const string Path::EXPORT = "export/";
+

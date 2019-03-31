@@ -38,7 +38,7 @@ public:
 	vector<string> GetCsvForCourse();
 
 	// Staff -> course
-	bool ImportCourse(const string &course_id, const string &csv_name);
+	bool ImportCourse(const string &csv_name);
 	bool AddNewCourse(Course &new_course, string &class_name, int number_period, Period &period_1, Period &period_2);
 	bool AddStudentToCourse(const string &course_id, int student_id);
 	bool EditCourse(Course &course);
@@ -48,6 +48,9 @@ public:
 	vector<string> GetCourselist();
 	vector<Student> GetStudentListFromCourse(string &course_name);
 	vector<Attendance> GetAttendanceList(string &course_name);
+	vector<string> SearchCourse(string &find_id);
+	bool ExportScoreboard(string &course_id);
+	bool ExportAttendance(string &course_id);
 };
 
 #endif

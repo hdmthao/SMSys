@@ -22,6 +22,7 @@ public:
     static string COURSE; 
     static string COURSES_LIST;
     static const string IMPORT_COURSE;
+    static const string EXPORT;
 };
 
 #endif

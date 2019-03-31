@@ -18,22 +18,10 @@ Courses::~Courses() {
 }
 
 
-bool Courses::ImportCourse(const string &course_id, const string &csv_name) {
-    const string COURSE_ID = Helper::StringToUpper(course_id);
-    const string path_to_course_dir = Path::COURSE + COURSE_ID;
-    const string path_to_csv_file = Path::IMPORT_COURSE + csv_name;
-    const string path_to_course = path_to_course_dir + "/course_info.txt";
-
-    // if course not exist so make a new database for this course and save to database
-    if (!ExistedCourse(COURSE_ID)) {
-        Helper::MakeDir(path_to_course_dir);
-        AddNewCourseToDatabase(COURSE_ID);
-    } else {
-        return false;
-    }
+bool Courses::ImportCourse(const string &csv_name) {
 
     // Load Course info
-    ifstream fi(path_to_csv_file);
+    ifstream fi(Path::IMPORT_COURSE + csv_name);
     if (!fi.is_open()) {
         return false;
     }
@@ -78,10 +66,18 @@ bool Courses::ImportCourse(const string &course_id, const string &csv_name) {
 
     new_course.ID = Helper::StringToUpper(new_course.ID);
 
-    // check course id is same
-    if (new_course.ID != COURSE_ID) {
+    const string COURSE_ID = new_course.ID;
+    const string path_to_course_dir = Path::COURSE + COURSE_ID;
+    const string path_to_course = path_to_course_dir + "/course_info.txt";
+
+    // if course not exist so make a new database for this course and save to database
+    if (!ExistedCourse(COURSE_ID)) {
+        Helper::MakeDir(path_to_course_dir);
+        AddNewCourseToDatabase(COURSE_ID);
+    } else {
         return false;
     }
+
     // Save Course info
     ofstream fo(path_to_course_dir + "/course_info.txt");
     Helper::UpperFirstCharOfLetter(new_course.name);
@@ -125,7 +121,6 @@ bool Courses::ImportCourse(const string &course_id, const string &csv_name) {
         fo_attendance.close();
     }
     fi.close();
-
     return true;
 }
 
@@ -338,7 +333,7 @@ bool Courses::RemoveCourse(string &course_id) {
     ofstream fo(Path::COURSES_LIST);
     for (int i = 0; i < course_list.size(); ++i) {
         if (course_list[i] != course_id) {
-            cout << course_list[i] << "\n";
+            fo << course_list[i] << "\n";
         }
     }
     fo.close();
@@ -385,3 +380,97 @@ Course Courses::GetCourseInfo(string &course_id) {
     Helper::ConvertStringToSpace(course.name);
     return course;
 }
+
+
+vector<string> Courses::SearchCourse(string &find_id) {
+    find_id = Helper::StringToUpper(find_id);
+
+    vector<string> course_list;
+    ifstream fi(Path::COURSES_LIST);
+
+    if (!fi.is_open()) {
+        return course_list;
+    }
+
+    string course_id;
+
+    while (fi >> course_id) {
+        if (course_id.find(find_id) != string::npos) {
+            course_list.push_back(course_id);
+        }
+    }
+    fi.close();
+
+    return course_list;
+}
+
+
+bool Courses::ExportScoreboard(string &course_id) {
+    course_id = Helper::StringToUpper(course_id);
+
+    ifstream fi(Path::COURSE + course_id + "/scoreboard.txt");
+    if (!fi.is_open()) {
+        return false;
+    }
+
+    ofstream fo(Path::EXPORT + course_id + "_scoreboard.csv");
+
+    string id, first_name, last_name, midterm, lab, bonus, Final, ABCF, GPA;
+    // Write Header
+    
+    fo << "No,Student ID,Last Name,First Name,Midterm,Lab,Bonus,Final,ABCF,GPA\n";
+    int count = 1;
+    while (fi >> id) {
+        fi >> first_name >> last_name >> midterm >> lab >> bonus >> Final >> ABCF >> GPA;
+        Helper::ConvertStringToSpace(last_name);
+        fo <<count << "," << id << "," << last_name << "," << first_name << "," << midterm <<
+            "," << lab << "," << bonus << "," << Final << "," << ABCF << "," << GPA << "\n";
+        count++;
+    }
+    fi.close();
+    fo.close();
+    return true;
+}
+
+
+bool Courses::ExportAttendance(string &course_id) {
+    course_id = Helper::StringToUpper(course_id);
+
+    ifstream fi(Path::COURSE + course_id + "/attendance.txt");
+    if (!fi.is_open()) {
+        return false;
+    }
+
+    ofstream fo(Path::EXPORT + course_id + "_attendance.csv");
+
+    string id, first_name, last_name;
+    // Write Header
+    
+    fo << "No,Student ID,Last Name,First Name";
+    for (int i = 1; i <= 10; ++i) {
+        fo << ",Week_" << i;
+    }
+    fo << "\n";
+    int count = 1;
+    while (fi >> id) {
+        fi >> first_name >> last_name;
+        Helper::ConvertStringToSpace(last_name);
+        fo <<count << "," << id << "," << last_name;
+        string x;
+        int cnt = 0;
+        for (int i = 1; i <= 10; ++i) {
+            fi >> x;
+            if (x == "1") cnt++;
+            fi >> x;
+            if (x == "1") cnt++;
+            fo << "," << cnt << "/2";
+            cnt = 0;
+        }
+        count++;
+        fo << "\n";
+    }
+    fi.close();
+    fo.close();
+    return true;
+}
+
