@@ -447,6 +447,59 @@ void TestSearchAndViewCourse() {
 
 
 void TestSearchAndViewAttendance() {
+	cout << "[RUN] TEST SEARCH AND VIEW ATTENDANCE\n\n";
+
+	string find_id = getString("Enter ID wanna search");
+
+	vector<string> course_list;
+
+	course_list = app->SearchCourse(find_id);
+
+	if (course_list.size() == 0) {
+		cout << "\n";
+		cout << "No Course Match!!!\n";
+	} else {
+		cout << ">> List of courses match\n";
+		for (int i = 0; i < course_list.size(); ++i) {
+			cout << i + 1 << ". " << course_list[i] << "\n";
+		}
+		cout << "\n";
+		int id = getInt("Select ID wanna to view attendance");
+
+	vector<Attendance> Attendance_list;
+
+	Attendance_list = app->GetAttendanceList(course_list[id - 1]);
+
+	cout << ">> Attendance List Of Course " << course_list[id - 1] << "\n";
+	cout << "\n";
+
+	cout << setw(12) << left << "ID" << setw(25) << left <<  "Full Name";
+	for (int i = 0; i < 10; ++i) {
+		string week = "";
+		if (i < 9) week = "Week-0" + std::to_string(i); else week = "Week-10";
+		cout << setw(10) << left << week;
+	}
+	cout << "\n";
+	cout << setfill('-') << setw(135) << "-" << "\n";
+	cout << setfill(' ');
+	for (int i = 0; i < Attendance_list.size(); ++i) {
+		cout << setw(12) << left << Attendance_list[i].ID;
+		cout << setw(25) << left << Helper::GetFullName(Attendance_list[i].first_name, Attendance_list[i].last_name);
+		for (int k = 0; k < Attendance_list[i].week.size(); k++)
+		{
+			string tmp = std::to_string(Attendance_list[i].week[k]) + "/2";
+			cout << setw(10) << left << tmp;
+		}
+		cout << "\n";
+	}
+	cout << setfill('-') << setw(135) << "-" << "\n";
+	cout << setfill(' ');
+	}
+
+	cout << "\n";
+	cout << "[DONE] TEST SEARCH AND VIEW ATTENDANCE\n";
+	cout << "PRESS ENTER";
+	cin.ignore();
 
 }
 
