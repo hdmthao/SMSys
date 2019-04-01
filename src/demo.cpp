@@ -36,16 +36,26 @@ int getInt(string msg) {
 	return x;
 }
 
+float getFloat(string msg) {
+	float x;
+	cout << msg << " :";
+	cin >> x;
+	// cin.clear();
+	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	return x;
+}
 
 void TestLogin() {
 	cout << "### TEST LOGIN\n";
 	string userName = getString("Ten Dang nhap");
 	string password = getString("Mat Khau");
-	
+
 	cout << "\n";
 	if (app->Login(userName, password)) {
 		cout << "[OK] Login OK\n";
-	} else {
+	}
+	else {
 		cout << "[X]  Login FAIL\n";
 	}
 
@@ -66,7 +76,8 @@ void TestImportClass() {
 	cout << "\n";
 	if (app->ImportClass(new_class_name, list_import[id - 1])) {
 		cout << "[OK] Import OK\n";
-	} else {
+	}
+	else {
 		cout << "[X]  Import FAIL\n";
 	}
 }
@@ -85,7 +96,8 @@ void TestAddNewStudentToClass() {
 
 	if (app->AddNewStudentToClass(class_name, new_student)) {
 		cout << "[OK] Add OK\n";
-	} else {
+	}
+	else {
 		cout << "[X]  Add FAIL\n";
 	}
 }
@@ -100,7 +112,8 @@ void TestChangeStudent() {
 	cout << "\n";
 	if (app->ChangeStudentFromClassAToB(id, class_b)) {
 		cout << "[OK] Change OK\n";
-	} else {
+	}
+	else {
 		cout << "[X]  Change FAIL\n";
 	}
 }
@@ -112,7 +125,8 @@ void TestRemoveStudentFromClass() {
 	cout << "\n";
 	if (app->RemoveStudentFromClass(id)) {
 		cout << ">> Remove OK\n";
-	} else {
+	}
+	else {
 		cout << ">> Remove FAIL\n";
 	}
 }
@@ -122,13 +136,57 @@ void TestEditStudentFromClass() {
 	Student student;
 	int id = getInt("id");
 	student = app->GetStudent(id);
-	
+
 	cout << "\n";
 	if (app->EditStudentFromClass(student)) {
 		cout << ">> Edit OK\n";
-	} else {
+	}
+	else {
 		cout << ">> Edit Fail\n";
 	}
+}
+
+void TestEditAttendance()
+{
+	cout << "### TEST EDIT ATTENDANCE\n";
+	string course_name = getString("Course Name: ");
+	Attendance a;
+	a.ID = getInt("ID");
+	cout << "\n";
+	for (int i = 0; i < 10; i++)
+	{
+		cout << "week " << i + 1 << " ";
+		int x;
+		cin >> x;
+		a.week.push_back(x);
+	}
+	if (app->EditAttendance(course_name, a)) {
+		cout << ">> Edit OK\n";
+	}
+	else {
+		cout << ">> Edit Fail\n";
+	}
+
+}
+void TestEditGradeOfStudent()
+{
+	cout << "### TEST EDIT GRADE OF STUDENT\n";
+	string course_name = getString("Course Name: ");
+	Score a;
+	a.ID = getInt("ID");
+	a.mid_term = getFloat("Midterm");
+	a.lab = getFloat("Lab");
+	a.bonus = getFloat("Bonus");
+	a.final_term = getFloat("Final");
+	a.ABCF = getString("Grade");
+	a.GPA = getFloat("GPA");
+	if (app->EditGradeOfStudent(course_name, a)) {
+		cout << ">> Edit OK\n";
+	}
+	else {
+		cout << ">> Edit Fail\n";
+	}
+
 }
 
 void TestViewListClass() {
@@ -136,7 +194,7 @@ void TestViewListClass() {
 	vector<string> class_list;
 	class_list = app->GetClassList();
 	for (int i = 0; i < class_list.size(); ++i) {
-		cout <<i + 1 << ". " << class_list[i] << "\n";
+		cout << i + 1 << ". " << class_list[i] << "\n";
 	}
 	cout << "\n";
 	cout << "[OK] View List Class OK\n";
@@ -151,8 +209,8 @@ void TestViewListClass() {
 	cout << ">> List Student Of Class " << class_list[id - 1] << "\n";
 	cout << "\n";
 
-	cout << setw(12) << left << "ID" << setw(25) << left <<  "Full Name" << setw(9) << left << "Gender" <<
-	setw(15) << left << "Day Of Birth" << setw(25) << left << "Email" << "\n";
+	cout << setw(12) << left << "ID" << setw(25) << left << "Full Name" << setw(9) << left << "Gender" <<
+		setw(15) << left << "Day Of Birth" << setw(25) << left << "Email" << "\n";
 	cout << setfill('-') << setw(80) << "-" << "\n";
 	cout << setfill(' ');
 	for (int i = 0; i < students_list.size(); ++i) {
@@ -206,7 +264,8 @@ void TestImportCourse() {
 
 	if (app->ImportCourse(list_import[id - 1])) {
 		cout << "[OK] Import Course OK\n";
-	} else {
+	}
+	else {
 		cout << "[X]  Import Course FAIL\n";
 	}
 	cout << "\n";
@@ -241,7 +300,8 @@ void TestAddNewCourse() {
 
 	if (app->AddNewCourse(new_course, class_name, number_period, period_1, period_2)) {
 		cout << "[OK] Add New Course OK\n";
-	} else {
+	}
+	else {
 		cout << "[X]  Add New Course FAIL\n";
 	}
 }
@@ -254,7 +314,8 @@ void TestAddStudentToCourse() {
 
 	if (app->AddStudentToCourse(course_id, student_id)) {
 		cout << ">> Add student id " << student_id << " to course " << course_id << "\n";
-	} else {
+	}
+	else {
 		cout << ">> Student not existed or existed in course\n";
 	}
 	cout << "\n";
@@ -269,7 +330,8 @@ void TestRemoveStudentFromCourse() {
 
 	if (app->RemoveStudentFromCourse(course_id, del_student)) {
 		cout << ">> Remove stunde id " << del_student << " from course " << course_id << "\n";
-	} else {
+	}
+	else {
 		cout << ">> Student not existed\n";
 	}
 
@@ -298,8 +360,8 @@ void TestViewCourseList() {
 	cout << ">> List Student Of Course " << course_list[id - 1] << "\n";
 	cout << "\n";
 
-	cout << setw(12) << left << "ID" << setw(25) << left <<  "Full Name" << setw(9) << left << "Gender" <<
-	setw(15) << left << "Day Of Birth" << setw(25) << left << "Email" << "\n";
+	cout << setw(12) << left << "ID" << setw(25) << left << "Full Name" << setw(9) << left << "Gender" <<
+		setw(15) << left << "Day Of Birth" << setw(25) << left << "Email" << "\n";
 	cout << setfill('-') << setw(80) << "-" << "\n";
 	cout << setfill(' ');
 	for (int i = 0; i < students_list.size(); ++i) {
@@ -314,7 +376,7 @@ void TestViewCourseList() {
 	cout << setfill(' ');
 	cout << "\n";
 	cout << "[OK] View List Student OK\n";
-	
+
 	cout << "\n";
 	cout << "### TEST VIEW ATTENDANCE LIST\n";
 
@@ -326,7 +388,7 @@ void TestViewCourseList() {
 	cout << ">> Attendance List Of Course " << course_list[id - 1] << "\n";
 	cout << "\n";
 
-	cout << setw(12) << left << "ID" << setw(25) << left <<  "Full Name";
+	cout << setw(12) << left << "ID" << setw(25) << left << "Full Name";
 	for (int i = 0; i < 10; ++i) {
 		string week = "";
 		if (i < 9) week = "Week-0" + std::to_string(i); else week = "Week-10";
@@ -347,9 +409,43 @@ void TestViewCourseList() {
 	}
 	cout << setfill('-') << setw(135) << "-" << "\n";
 	cout << setfill(' ');
+	//SCOREBOARD
+	cout << "\n";
+	cout << "### TEST VIEW SCOREBOARD\n";
+
+	id = getInt("Index Coures");
+	vector<Score> ScoreBoard;
+
+	ScoreBoard = app->GetScoreBoard(course_list[id - 1]);
+
+	cout << ">> Score Board Of Course " << course_list[id - 1] << "\n";
+	cout << "\n";
+
+	cout << setw(12) << left << "ID" << setw(25) << left << "Full Name";
+
+	cout << setw(10) << left << "Midterm";
+	cout << setw(10) << left << "Lab";
+	cout << setw(10) << left << "Bonus";
+	cout << setw(10) << left << "Finalterm";
+	cout << setw(10) << left << "Grade";
+	cout << setw(10) << left << "GPA";
+	cout << "\n";
+	cout << setfill('-') << setw(135) << "-" << "\n";
+	cout << setfill(' ');
+	for (int i = 0; i < ScoreBoard.size(); ++i) {
+		cout << setw(12) << left << ScoreBoard[i].ID;
+		cout << setw(25) << left << Helper::GetFullName(ScoreBoard[i].first_name, ScoreBoard[i].last_name);
+		cout << setw(10) << left << ScoreBoard[i].mid_term;
+		cout << setw(10) << left << ScoreBoard[i].lab;
+		cout << setw(10) << left << ScoreBoard[i].bonus;
+		cout << setw(10) << left << ScoreBoard[i].final_term;
+		cout << setw(10) << left << ScoreBoard[i].ABCF;
+		cout << setw(10) << left << ScoreBoard[i].GPA;
+		cout << "\n";
+	}
+	cout << setfill('-') << setw(135) << "-" << "\n";
+	cout << setfill(' ');
 }
-
-
 void TestRemoveCourse() {
 	cout << "### TEST REMOVE COURSE\n";
 
@@ -365,7 +461,8 @@ void TestRemoveCourse() {
 
 	if (app->RemoveCourse(course_list[id - 1])) {
 		cout << ">> Remove Course " << course_list[id - 1] << " OK\n";
-	} else {
+	}
+	else {
 		cout << ">> Remove Course " << course_list[id - 1] << " FAILD\n";
 	}
 
@@ -373,6 +470,18 @@ void TestRemoveCourse() {
 	cout << "[OK] REMOVE COURSE OK\n";
 }
 
+void TestViewProfile()
+{
+	cout << "### TEST VIEW PROFILE\n";
+	string username = "18125049";
+	UserRole role = STUDENT;
+	Profile a = app->GetProfile(username, role);
+	cout << "Class Name: " << a.class_name<<"\n";
+	cout << "Full Name: " << a.fullName << "\n";
+	cout << "ID: " << a.ID << "\n";
+	cout << "Gender: " << a.gender << "\n";
+	cout << "Role: " << UserRole(a.role) << "\n";
+}
 
 void TestEditCourses() {
 	cout << "### TEST EDIT COURSE\n";
@@ -407,7 +516,8 @@ void TestEditCourses() {
 
 	if (app->EditCourse(course)) {
 		cout << ">> Edit course OK\n";
-	} else {
+	}
+	else {
 		cout << ">> Edit course Fail\n";
 	}
 
@@ -428,7 +538,8 @@ void TestSearchAndViewCourse() {
 	if (course_list.size() == 0) {
 		cout << "\n";
 		cout << "No Course Match!!!\n";
-	} else {
+	}
+	else {
 		cout << ">> List Of Course Impossible\n";
 		for (int i = 0; i < course_list.size(); ++i) {
 			cout << i + 1 << ". " << course_list[i] << "\n";
@@ -458,7 +569,8 @@ void TestSearchAndViewAttendance() {
 	if (course_list.size() == 0) {
 		cout << "\n";
 		cout << "No Course Match!!!\n";
-	} else {
+	}
+	else {
 		cout << ">> List of courses match\n";
 		for (int i = 0; i < course_list.size(); ++i) {
 			cout << i + 1 << ". " << course_list[i] << "\n";
@@ -466,34 +578,34 @@ void TestSearchAndViewAttendance() {
 		cout << "\n";
 		int id = getInt("Select ID wanna to view attendance");
 
-	vector<Attendance> Attendance_list;
+		vector<Attendance> Attendance_list;
 
-	Attendance_list = app->GetAttendanceList(course_list[id - 1]);
+		Attendance_list = app->GetAttendanceList(course_list[id - 1]);
 
-	cout << ">> Attendance List Of Course " << course_list[id - 1] << "\n";
-	cout << "\n";
+		cout << ">> Attendance List Of Course " << course_list[id - 1] << "\n";
+		cout << "\n";
 
-	cout << setw(12) << left << "ID" << setw(25) << left <<  "Full Name";
-	for (int i = 0; i < 10; ++i) {
-		string week = "";
-		if (i < 9) week = "Week-0" + std::to_string(i); else week = "Week-10";
-		cout << setw(10) << left << week;
-	}
-	cout << "\n";
-	cout << setfill('-') << setw(135) << "-" << "\n";
-	cout << setfill(' ');
-	for (int i = 0; i < Attendance_list.size(); ++i) {
-		cout << setw(12) << left << Attendance_list[i].ID;
-		cout << setw(25) << left << Helper::GetFullName(Attendance_list[i].first_name, Attendance_list[i].last_name);
-		for (int k = 0; k < Attendance_list[i].week.size(); k++)
-		{
-			string tmp = std::to_string(Attendance_list[i].week[k]) + "/2";
-			cout << setw(10) << left << tmp;
+		cout << setw(12) << left << "ID" << setw(25) << left << "Full Name";
+		for (int i = 0; i < 10; ++i) {
+			string week = "";
+			if (i < 9) week = "Week-0" + std::to_string(i); else week = "Week-10";
+			cout << setw(10) << left << week;
 		}
 		cout << "\n";
-	}
-	cout << setfill('-') << setw(135) << "-" << "\n";
-	cout << setfill(' ');
+		cout << setfill('-') << setw(135) << "-" << "\n";
+		cout << setfill(' ');
+		for (int i = 0; i < Attendance_list.size(); ++i) {
+			cout << setw(12) << left << Attendance_list[i].ID;
+			cout << setw(25) << left << Helper::GetFullName(Attendance_list[i].first_name, Attendance_list[i].last_name);
+			for (int k = 0; k < Attendance_list[i].week.size(); k++)
+			{
+				string tmp = std::to_string(Attendance_list[i].week[k]) + "/2";
+				cout << setw(10) << left << tmp;
+			}
+			cout << "\n";
+		}
+		cout << setfill('-') << setw(135) << "-" << "\n";
+		cout << setfill(' ');
 	}
 
 	cout << "\n";
@@ -514,7 +626,8 @@ void TestExportScoreboard() {
 
 	if (course_list.size() == 0) {
 		cout << "No course to export scoreboard\n";
-	} else {
+	}
+	else {
 		for (int i = 0; i < course_list.size(); ++i) {
 			cout << i + 1 << ". " << course_list[i] << "\n";
 		}
@@ -523,7 +636,8 @@ void TestExportScoreboard() {
 		if (app->ExportScoreboard(course_list[id - 1])) {
 			cout << ">> Export file save to \\export\\" << course_list[id - 1] << "_scoreboard.txt" << "\n";
 			cout << ">> Export scoreboard of course " << course_list[id - 1] << " OK\n";
-		} else {
+		}
+		else {
 			cout << ">> Export FAIL!!!\n";
 		}
 	}
@@ -544,7 +658,8 @@ void TestExportAttendance() {
 
 	if (course_list.size() == 0) {
 		cout << "No course to export attendance\n";
-	} else {
+	}
+	else {
 		for (int i = 0; i < course_list.size(); ++i) {
 			cout << i + 1 << ". " << course_list[i] << "\n";
 		}
@@ -553,7 +668,8 @@ void TestExportAttendance() {
 		if (app->ExportAttendance(course_list[id - 1])) {
 			cout << ">> Export file save to \\export\\" << course_list[id - 1] << "_attendance.csv" << "\n";
 			cout << ">> Export attendace of course " << course_list[id - 1] << " OK\n";
-		} else {
+		}
+		else {
 			cout << ">> Export FAIL!!!\n";
 		}
 	}
@@ -572,6 +688,7 @@ void Notyet() {
 int main() {
 	vector<pair<int, string>> menu;
 	menu.push_back(make_pair(1, "Login"));
+	menu.push_back(make_pair(3, "View Profile"));
 	menu.push_back(make_pair(6, "Import Class"));
 	menu.push_back(make_pair(7, "Add New Student To Class"));
 	menu.push_back(make_pair(8, "Edit Student From Class"));
@@ -592,24 +709,29 @@ int main() {
 	menu.push_back(make_pair(25, "Export scoreboard"));
 	menu.push_back(make_pair(26, "Search and View Attendance of a course"));
 	menu.push_back(make_pair(27, "Export Attendance"));
+	menu.push_back(make_pair(28, "Edit Attendance"));
+	menu.push_back(make_pair(29, "Edit Grade of Student"));
+
 
 	while (1) {
-	cout << "          DEMO SMSys\n\n";
-	for (int i = 0; i < menu.size(); ++i) {
-		cout << menu[i].first << ". " << menu[i].second << "\n";
-	}
-	cout << 0 << ". EXIT\n";
-	cout << "\n";
+		cout << "          DEMO SMSys\n\n";
+		for (int i = 0; i < menu.size(); ++i) {
+			cout << menu[i].first << ". " << menu[i].second << "\n";
+		}
+		cout << 0 << ". EXIT\n";
+		cout << "\n";
 
-	int opt = getInt("Enter Index Feature Wanna Test");
-	cout << "\n";
-	if (opt == 0) break;
-	switch(opt) {
+		int opt = getInt("Enter Index Feature Wanna Test");
+		cout << "\n";
+		if (opt == 0) break;
+		switch (opt) {
 		case 1:
 			TestLogin();
 			break;
 		case 2:
 		case 3:
+			TestViewProfile();
+			break;
 		case 4:
 			Notyet();
 			break;
@@ -672,9 +794,15 @@ int main() {
 		case 27:
 			TestExportAttendance();
 			break;
+		case 28:
+			TestEditAttendance();
+			break;
+		case 29:
+			TestEditGradeOfStudent();
+			break;
 		default:
 			Notyet();
 			break;
-	}
+		}
 	}
 }

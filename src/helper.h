@@ -5,6 +5,7 @@
 #include "data_student.h"
 #include "data_account.h"
 #include "data_attendance.h"
+#include "data_score.h"
 
 #include <vector>
 
@@ -27,5 +28,6 @@ public:
     static Attendance stringToAttendance(string a);
     static void GetFileInFolder(vector<string> &lists, string &path);
     static string GetFullName(const string &first_name, const string &last_name);
+	static Score stringToScore(string a);
 };
 #endif

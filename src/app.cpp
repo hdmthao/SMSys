@@ -238,3 +238,33 @@ bool App::ExportAttendance(string &course_id) {
 
 	return export_status;
 }
+vector <Score> App::GetScoreBoard(string&course_name)
+{
+	vector<Score> ScoreBoard;
+
+	ScoreBoard = staff->GetScoreBoard(course_name);
+
+	return ScoreBoard;
+}
+bool App::EditAttendance(string course_ID, Attendance a)
+{
+	bool EditStatus;
+
+	EditStatus = staff->EditAttendance(course_ID, a);
+
+	return EditStatus;
+}
+bool App::EditGradeOfStudent(string course_ID, Score a)
+{
+	bool EditStatus;
+
+	EditStatus = staff->EditGradeOfStudent(course_ID, a);
+
+	return EditStatus;
+}
+Profile App::GetProfile(const string &userName, UserRole role)
+{
+	Profile a;
+	a = user->GetProfile(userName, role);
+	return a;
+}

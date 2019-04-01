@@ -31,6 +31,9 @@ public:
 	bool ChangeStudentFromClassAToB(const int &id, string &class_b);
 	bool RemoveStudentFromClass(const int &ID);
 	bool EditStudentFromClass(Student &student);
+	bool EditAttendance(string course_ID, Attendance a);
+	bool EditGradeOfStudent(string course_ID, Score a);
+
 	Student GetStudent(const int &id);
 	vector<string> GetClassList();
 	vector<Student> GetStudentListFromClass(string &class_name);
@@ -51,6 +54,8 @@ public:
 	vector<string> SearchCourse(string &find_id);
 	bool ExportScoreboard(string &course_id);
 	bool ExportAttendance(string &course_id);
+	vector <Score> GetScoreBoard(string&course_name);
+	Profile GetProfile(const string &userName, UserRole role);
 };
 
 #endif

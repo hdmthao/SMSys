@@ -4,6 +4,7 @@
 #include "data_student.h"
 #include "data_account.h"
 #include "data_attendance.h"
+#include "data_score.h"
 
 #include <vector>
 #include <string>
@@ -32,6 +33,8 @@ public:
     bool ChangeStudentFromClassAToB(const int &id, string &class_b);
     bool RemoveStudentFromClass(const int &ID);
     bool EditStudentFromClass(Student &student);
+	bool EditAttendance(string course_id, Attendance a);
+	bool EditGradeOfStudent(string course_id, Score a);
     Student GetStudent(const int &ID);
     vector<string> GetClassList();
 	vector<Student> GetStudentListFromClass(string &class_name);
@@ -41,6 +44,8 @@ public:
     vector<string> GetCourselist();
 	vector<Student> GetStudentListFromCourse(string &course_id);
 	vector<Attendance> GetAttendanceList(string &course_id);
+	vector <Score> GetScoreBoard(string&course_id);
+
 };
 
 #endif
