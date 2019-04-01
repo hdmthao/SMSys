@@ -473,14 +473,14 @@ void TestRemoveCourse() {
 void TestViewProfile()
 {
 	cout << "### TEST VIEW PROFILE\n";
-	string username = "18125049";
-	UserRole role = STUDENT;
+	string username = "dbtien";
+	UserRole role = LECTURER;
 	Profile a = app->GetProfile(username, role);
-	cout << "Class Name: " << a.class_name<<"\n";
+	cout << "Class Name: " << a.class_name << "\n";
 	cout << "Full Name: " << a.fullName << "\n";
 	cout << "ID: " << a.ID << "\n";
 	cout << "Gender: " << a.gender << "\n";
-	cout << "Role: " << UserRole(a.role) << "\n";
+	cout << "Role: " << a.role << "\n";
 }
 
 void TestEditCourses() {
@@ -679,6 +679,20 @@ void TestExportAttendance() {
 	cin.ignore();
 }
 
+void TestViewLecturerCourseList()
+{
+	cout << "[RUN] Test View Lecturer Course List\n\n";
+	string ID = getString("Lecturer ID");
+	vector<string> result;
+	result = app->GetLecturerList(ID);
+	cout << ID << "\n";
+	for (int j = 0; j < result.size(); j++)
+	{
+		cout << j + 1 << ". " << result[j] << "\n";
+	}
+
+	cout << "[OK]";
+}
 void Notyet() {
 	cout << "Feature Will Coming Soon...\n";
 	cout << "Press Enter";
@@ -711,7 +725,7 @@ int main() {
 	menu.push_back(make_pair(27, "Export Attendance"));
 	menu.push_back(make_pair(28, "Edit Attendance"));
 	menu.push_back(make_pair(29, "Edit Grade of Student"));
-
+	menu.push_back(make_pair(30, "View list of courses in the current semester."));
 
 	while (1) {
 		cout << "          DEMO SMSys\n\n";
@@ -799,6 +813,9 @@ int main() {
 			break;
 		case 29:
 			TestEditGradeOfStudent();
+			break;
+		case 30:
+			TestViewLecturerCourseList();
 			break;
 		default:
 			Notyet();

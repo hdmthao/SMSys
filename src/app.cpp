@@ -92,18 +92,18 @@ Student App::GetStudent(const int &ID) {
 
 vector<string> App::GetClassList() {
 	vector<string> class_list;
-	
+
 	class_list = staff->GetClassList();
-	
+
 	return class_list;
 }
 
 
 vector<Student> App::GetStudentListFromClass(string &class_name) {
 	vector<Student> students_list;
-	
+
 	students_list = staff->GetStudentListFromClass(class_name);
-	
+
 	return students_list;
 }
 
@@ -119,7 +119,7 @@ vector<string> App::GetCsvForClass() {
 
 bool App::ImportCourse(const string &csv_name) {
 	bool import_status;
-	
+
 	import_status = courses->ImportCourse(csv_name);
 
 	return import_status;
@@ -266,5 +266,11 @@ Profile App::GetProfile(const string &userName, UserRole role)
 {
 	Profile a;
 	a = user->GetProfile(userName, role);
+	return a;
+}
+vector<string> App::GetLecturerList(string ID)
+{
+	vector<string> a;
+	a = lecturer->GetLecturerList(ID);
 	return a;
 }

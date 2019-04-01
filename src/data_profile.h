@@ -6,11 +6,13 @@
 using std::string;
 
 struct Profile {
-	int ID;
+	string ID;
 	UserRole role;
 	string fullName;
 	string gender;
 	string class_name;
+	string email;
+	string DoB;
 };
 
 #endif

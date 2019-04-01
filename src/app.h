@@ -4,6 +4,7 @@
 #include "user.h"
 #include "staff.h"
 #include "courses.h"
+#include "data_lecturer.h"
 
 #include <string>
 
@@ -16,7 +17,7 @@ private:
 	User* user;
 	Staff* staff;
 	Courses* courses;
-		
+	Lecturer* lecturer;
 public:
 	App();
 	~App();
@@ -31,8 +32,7 @@ public:
 	bool ChangeStudentFromClassAToB(const int &id, string &class_b);
 	bool RemoveStudentFromClass(const int &ID);
 	bool EditStudentFromClass(Student &student);
-	bool EditAttendance(string course_ID, Attendance a);
-	bool EditGradeOfStudent(string course_ID, Score a);
+
 
 	Student GetStudent(const int &id);
 	vector<string> GetClassList();
@@ -56,6 +56,11 @@ public:
 	bool ExportAttendance(string &course_id);
 	vector <Score> GetScoreBoard(string&course_name);
 	Profile GetProfile(const string &userName, UserRole role);
+	bool EditAttendance(string course_ID, Attendance a);
+	bool EditGradeOfStudent(string course_ID, Score a);
+	//Lecturer ->course
+	vector<string> GetLecturerList(string ID);
+
 };
 
 #endif

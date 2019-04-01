@@ -33,18 +33,19 @@ public:
     bool ChangeStudentFromClassAToB(const int &id, string &class_b);
     bool RemoveStudentFromClass(const int &ID);
     bool EditStudentFromClass(Student &student);
-	bool EditAttendance(string course_id, Attendance a);
-	bool EditGradeOfStudent(string course_id, Score a);
     Student GetStudent(const int &ID);
     vector<string> GetClassList();
 	vector<Student> GetStudentListFromClass(string &class_name);
     bool IsExistedStudent(const int &);
     vector<string> GetCsvForClass();
+	//For course
     vector<string> GetCsvForCourse();
     vector<string> GetCourselist();
 	vector<Student> GetStudentListFromCourse(string &course_id);
 	vector<Attendance> GetAttendanceList(string &course_id);
 	vector <Score> GetScoreBoard(string&course_id);
+	bool EditAttendance(string course_id, Attendance a);
+	bool EditGradeOfStudent(string course_id, Score a);
 
 };
 

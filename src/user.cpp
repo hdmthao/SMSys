@@ -2,6 +2,7 @@
 #include "generator.h"
 #include "path.h"
 #include "helper.h"
+#include "data_lecturer.h"
 
 #include <fstream>
 #include <vector>
@@ -109,22 +110,44 @@ Profile User::GetProfile(const string &userName, UserRole role)
 	case UserRole::LECTURER:
 	{
 		result.role = LECTURER;
+		result.ID = userName;
+		ifstream fin;
+		fin.open(Path::LECTURER_LIST);
+		Lecturer tmp;
+		// Get lecturer full name
+		if (fin.is_open())
+		{
+			while (fin >> tmp.ID >> tmp.first_name >> tmp.last_name >> tmp.numOfCourse)
+			{
+				if (tmp.ID == result.ID)
+				{
+					Helper::ConvertStringToSpace(tmp.last_name);
+					result.fullName = tmp.last_name + " " + tmp.first_name;
+				}
+			}
+		}
+		fin.close();
+		result.email = userName + "@hcmus.edu.vn";
+		result.gender = "null";
+		result.DoB = "null";
+		result.class_name = "null";
+		return result;
 	}
 	case UserRole::STAFF:
 	{
 		result.role = STAFF;
-
+		break;
 	}
 	case UserRole::STUDENT:
 	{
 		result.role = STUDENT;
-		result.ID = stoi(userName);
+		result.ID = userName;
 		// GET STUDENT'S CLASSNAME
 		ifstream fi(Path::ALL_STUDENT);
 		if (!fi.is_open()) {
 			result.class_name = "";
 		}
-		int id;
+		string id;
 		string class_name;
 		while (fi >> id >> class_name) {
 			if (id == result.ID) {
@@ -139,10 +162,12 @@ Profile User::GetProfile(const string &userName, UserRole role)
 		ifstream in(tmp_path);
 		while (in >> tmp_student.ID >> tmp_student.first_name >> tmp_student.last_name >>
 			tmp_student.gender >> tmp_student.dob >> tmp_student.email) {
-			if (tmp_student.ID == result.ID) {
+			if (tmp_student.ID == stoi(result.ID)) {
 				Helper::ConvertStringToSpace(tmp_student.last_name);
 				result.fullName = tmp_student.last_name + " " + tmp_student.first_name;
 				result.gender = tmp_student.gender;
+				result.DoB = tmp_student.dob;
+				result.email = tmp_student.email;
 			}
 		}
 		in.close();

@@ -23,6 +23,9 @@ public:
     static string COURSES_LIST;
     static const string IMPORT_COURSE;
     static const string EXPORT;
+	//Lecturer
+	static const string LECTURER_LIST;
+
 };
 
 #endif
