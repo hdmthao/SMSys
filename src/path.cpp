@@ -37,3 +37,4 @@ const string Path::IMPORT_COURSE = "data/import/course/";
 // Path to folder save all export file
 const string Path::EXPORT = "export/";
 
+const string Path::LECTURER = "data/lecturer/lecturers_list.txt";

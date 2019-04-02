@@ -5,6 +5,7 @@
 #include "data_account.h"
 #include "data_attendance.h"
 #include "data_period.h"
+#include "data_score.h"
 
 #include <vector>
 #include <string>
@@ -26,6 +27,7 @@ public:
     static UserRole FormatIntToRole(int &role);
     static Student stringToStudent(string a, string classname);
     static Attendance stringToAttendance(string a);
+    static Score stringToScore(string a);
     static void GetFileInFolder(vector<string> &lists, string &path);
     static string GetFullName(const string &first_name, const string &last_name);
 

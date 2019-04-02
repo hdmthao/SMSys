@@ -1,6 +1,7 @@
 #include "courses.h"
 #include "helper.h"
 #include "path.h"
+#include "lecturers.h"
 
 #include <fstream>
 #include <iostream>
@@ -122,6 +123,9 @@ bool Courses::ImportCourse(const string &csv_name) {
         fo_attendance.close();
     }
     fi.close();
+
+    Lecturers::AddNewCourse(new_course.lecturer, new_course.ID);
+    Lecturers::CreateAccountForLecturer(1111111111, new_course.lecturer, new_course.lecturer);
     return true;
 }
 
@@ -179,6 +183,9 @@ bool Courses::AddNewCourse(Course &new_course, string &class_name, int number_pe
         fo_score.close();
     }
     fi.close();
+
+    Lecturers::AddNewCourse(new_course.lecturer, new_course.ID);
+    Lecturers::CreateAccountForLecturer(1111111111, new_course.lecturer, new_course.lecturer);
     return true;
 }
 
@@ -347,6 +354,7 @@ bool Courses::RemoveCourse(string &course_id) {
     Helper::RemoveDir(course_id);
 
     RemoveCourseFromStudentList(course_id);
+    Lecturers::RemoveCourse(course_id);
     return true;
 }
 

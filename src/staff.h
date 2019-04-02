@@ -4,6 +4,7 @@
 #include "data_student.h"
 #include "data_account.h"
 #include "data_attendance.h"
+#include "data_score.h"
 
 #include <vector>
 #include <string>
@@ -41,6 +42,7 @@ public:
     vector<string> GetCourselist();
 	vector<Student> GetStudentListFromCourse(string &course_id);
 	vector<Attendance> GetAttendanceList(string &course_id);
+    vector<Score> GetScoreBoard(string &course_id);
 };
 
 #endif

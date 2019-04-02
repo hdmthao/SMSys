@@ -10,15 +10,15 @@ using std::string;
 
 class User {
 private:
-	bool isAuthenticated;
-	Account* account;
-	
 	UserRole FormatIntToRole(int role);
 
 public:
 	User();
-	~User()
-		;
+	~User();
+
+	Account* account;
+	bool isAuthenticated;	
+
 	bool Login(const string &userName, const string &passWord);
 	bool Logout();
 	bool FirstTimeLogin(void);

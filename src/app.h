@@ -5,6 +5,7 @@
 #include "staff.h"
 #include "courses.h"
 #include "students.h"
+#include "lecturers.h"
 
 #include <string>
 
@@ -53,11 +54,17 @@ public:
 	bool ExportScoreboard(string &course_id);
 	bool ExportAttendance(string &course_id);
 
+	// Lecturer
+	vector<string> LecturerGetCoursesList();
+	bool LecturerEditAttendance(int ID, string &course_id, int week, int count);
+	vector<Score> LecturerGetScoreboard(string &course_id);
+	bool LecturerEditGrade(string &course_id, Score &score);
+
 	// Student
-	string CheckIn();
-	vector<Attendance> ViewCheckInResult();
+	string StudentCheckIn();
+	vector<Attendance> StudentViewCheckInResult();
 	vector<Schedule> StudentGetSchedule();
-	vector<Score> ViewScoreboard();
+	vector<Score> StudentViewScoreboard();
 };
 
 #endif

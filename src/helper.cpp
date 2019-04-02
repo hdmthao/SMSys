@@ -186,6 +186,47 @@ Attendance Helper::stringToAttendance(string a) {
 }
 
 
+Score Helper::stringToScore(string a)
+{
+	if (!a.empty())
+	{
+		string id, mid_term, final_term, lab, bonus, GPA;
+		Score x;
+		int count = 0;
+		for (int i = 0; i < a.length(); i++)
+		{
+			if (a.at(i) == ' ') count++;
+			else
+			{
+				if (count == 0) id.push_back(a.at(i));
+				if (count == 1) x.first_name.push_back(a.at(i));
+				if (count == 2) x.last_name.push_back(a.at(i));
+				if (count == 3) mid_term.push_back(a.at(i));
+				if (count == 4) lab.push_back(a.at(i));
+				if (count == 5) bonus.push_back(a.at(i));
+				if (count == 6) final_term.push_back(a.at(i));
+				if (count == 7) x.ABCF.push_back(a.at(i));
+				if (count == 8) GPA.push_back(a.at(i));
+			}
+		}
+		x.ID = stoi(id);
+		x.mid_term = stof(mid_term);
+		x.final_term = stof(final_term);
+		x.lab = stof(lab);
+		x.bonus = stof(bonus);
+		x.GPA = stof(GPA);
+		ConvertStringToSpace(x.last_name);
+		return x;
+	}
+	else
+	{
+		Score x;
+		x.ID = 0;
+		return x;
+	}
+}
+
+
 void Helper::GetFileInFolder(vector<string> &lists, string &path) {
     DIR* dir;
 

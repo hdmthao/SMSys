@@ -24,6 +24,7 @@ public:
     static string STUDENTS_LIST;
     static const string IMPORT_COURSE;
     static const string EXPORT;
+    static const string LECTURER;
 };
 
 #endif

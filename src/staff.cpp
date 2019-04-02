@@ -571,3 +571,22 @@ vector<Attendance> Staff::GetAttendanceList(string &course_id) {
 	fin.close();
 	return attendance_list;
 }
+
+vector <Score> Staff::GetScoreBoard(string& course_id) {
+	Helper::StringToUpper(course_id);
+	vector<Score> ScoreBoard;
+	string path = Path::COURSE + course_id + "/scoreboard.txt";
+	ifstream fin(path);
+	if (fin.is_open()) {
+		while (!fin.eof()) {
+			string data_line;
+			getline(fin, data_line);
+			Score score;
+			score = Helper::stringToScore(data_line);
+			if (score.ID == 0) break;
+			ScoreBoard.push_back(score);
+		}
+	}
+	fin.close();
+	return ScoreBoard;
+}

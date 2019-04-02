@@ -240,7 +240,42 @@ bool App::ExportAttendance(string &course_id) {
 }
 
 
-string App::CheckIn() {
+vector<string> App::LecturerGetCoursesList() {
+	vector<string> list;
+	string name = "dbtien@hcmus";
+
+	list = Lecturers::GetCoursesList(name);
+	
+	return list;
+}
+
+bool App::LecturerEditGrade(string &course_id, Score &score) {
+	bool edit_status;
+
+	edit_status = Lecturers::EditGrade(course_id, score);
+
+	return edit_status;
+}
+
+bool App::LecturerEditAttendance(int ID, string &course_id, int week, int count) {
+	bool edit_status;
+
+	edit_status = Lecturers::EditAttendance(ID, course_id,week,count);
+
+	return edit_status;
+}
+
+
+vector<Score> App::LecturerGetScoreboard(string &course_id) {
+	vector<Score> scoreboard;
+
+	scoreboard = staff->GetScoreBoard(course_id);
+	
+	return scoreboard;
+}
+
+
+string App::StudentCheckIn() {
 	string check_in_status = "";
 
 	int ID = this->user->GetStudentID();
@@ -251,7 +286,7 @@ string App::CheckIn() {
 }
 
 
-vector<Attendance> App::ViewCheckInResult() {
+vector<Attendance> App::StudentViewCheckInResult() {
 	vector<Attendance> atten;
 	int ID = this->user->GetStudentID();
 
@@ -270,7 +305,7 @@ vector<Schedule> App::StudentGetSchedule() {
 
 }
 
-vector<Score> App::ViewScoreboard() {
+vector<Score> App::StudentViewScoreboard() {
 	vector<Score> scoreboard;
 	int ID = this->user->GetStudentID();
 	scoreboard = Students::ViewScore(ID);
