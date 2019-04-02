@@ -4,6 +4,7 @@
 #include "user.h"
 #include "staff.h"
 #include "courses.h"
+#include "students.h"
 
 #include <string>
 
@@ -16,7 +17,7 @@ private:
 	User* user;
 	Staff* staff;
 	Courses* courses;
-		
+
 public:
 	App();
 	~App();
@@ -51,6 +52,12 @@ public:
 	vector<string> SearchCourse(string &find_id);
 	bool ExportScoreboard(string &course_id);
 	bool ExportAttendance(string &course_id);
+
+	// Student
+	string CheckIn();
+	vector<Attendance> ViewCheckInResult();
+	vector<Schedule> StudentGetSchedule();
+	vector<Score> ViewScoreboard();
 };
 
 #endif

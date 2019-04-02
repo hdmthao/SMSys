@@ -21,6 +21,7 @@ public:
     static string SEMESTER;
     static string COURSE; 
     static string COURSES_LIST;
+    static string STUDENTS_LIST;
     static const string IMPORT_COURSE;
     static const string EXPORT;
 };

@@ -7,6 +7,7 @@ using std::string;
 
 struct Score {
 	int ID;
+    string course_id;
 	string first_name;
     string last_name;
 	float mid_term;

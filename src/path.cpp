@@ -30,6 +30,7 @@ string Path::COURSE = "data/course/" + Path::ACADEMIC_YEAR + "/" + Path::SEMESTE
 // Path to list of all existed courses in current year/semester 
 string Path::COURSES_LIST = Path::COURSE + "courses_list.txt";
 
+string Path::STUDENTS_LIST = Path::COURSE + "students_list.txt";
 // Path to folder save all csv file to import course
 const string Path::IMPORT_COURSE = "data/import/course/";
 

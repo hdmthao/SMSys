@@ -281,6 +281,12 @@ bool Staff::RemoveStudentFromClass(const int &ID){
 
     DeleteAccount(ID);
 
+    // Students* students;
+    // // vector<string> list = students->GetCourseList(ID);
+    // delete students;
+    // // for (int i = 0; i < list.size(); ++i) {
+    // //     courses->RemoveStudentFromCourse(list[i], ID);
+    // // }
 	return done == 2; // delete from 2 file
 }
 

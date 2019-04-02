@@ -11,6 +11,7 @@
 #include "path.h"
 #include <string.h>
 #include <iostream>
+#include <time.h>
 
 string Helper::StringToUpper(const string &str) {
     string new_string = str;
@@ -64,7 +65,7 @@ void Helper::RemoveDir(const string &dir_name) {
 			remove(path.c_str());
 		}
 	}
-	std::cout << path_to_dir << "\n";
+	closedir(dir);
 	remove(path_to_dir.c_str());
 }
 
@@ -202,3 +203,118 @@ void Helper::GetFileInFolder(vector<string> &lists, string &path) {
 string Helper::GetFullName(const string &first_name, const string &last_name) {
     return last_name + " " + first_name;
 }
+
+Period Helper::GetCurrentPeriod() {
+	time_t rawtime;
+	struct tm * timeinfo;
+
+	time (&rawtime);
+	timeinfo = localtime (&rawtime);
+    string ti = asctime(timeinfo);
+
+	Period current_period;
+	// Get Day of week
+	string dow = ti.substr(0, 3);
+	std::cout << dow;
+	return current_period;
+}
+
+string Helper::GetCurrentTime() {
+	time_t rawtime;
+	struct tm * timeinfo;
+
+	time (&rawtime);
+	timeinfo = localtime (&rawtime);
+	string cur_time = asctime(timeinfo);
+	return cur_time;
+}
+
+int Helper::ConvertDoW(string &Dow_str){
+	int DoW = 0;
+	DoW += 2 * (Dow_str == "Mon");
+	DoW += 3 * (Dow_str == "Tue");
+	DoW += 4 * (Dow_str == "Wed");
+	DoW += 5 * (Dow_str == "Thu");
+	DoW += 6 * (Dow_str == "Fri");
+	DoW += 7 * (Dow_str == "Sat");
+	return DoW;
+}
+
+int Helper::ConvertDoM(string &Dom_str){
+	int DoM = 0;
+	DoM += 1 * (Dom_str == "Jan");
+	DoM += 2 * (Dom_str == "Feb");
+	DoM += 3 * (Dom_str == "Mar");
+	DoM += 4 * (Dom_str == "Apr");
+	DoM += 5 * (Dom_str == "May");
+	DoM += 6 * (Dom_str == "Jun");
+	DoM += 7 * (Dom_str == "Jul");
+	DoM += 8 * (Dom_str == "Aug");
+	DoM += 9 * (Dom_str == "Sep");
+	DoM += 10 * (Dom_str == "Oct");
+	DoM += 11 * (Dom_str == "Nov");
+	DoM += 12 * (Dom_str == "Dec");
+	return DoM;
+}
+
+int Helper::GetCurrentShift(string &cur_time){
+	string timeGet = "";
+	timeGet += cur_time[11];
+	timeGet += cur_time[12];
+	return ((timeGet > "00") + (timeGet >= "09") + (timeGet >= "13") + (timeGet >= "15"));
+}
+
+int Helper::GetCurrentDoW(string &cur_time){
+	string getDoW = cur_time;
+	getDoW.resize(3);
+	return Helper::ConvertDoW(getDoW);
+}
+
+int Helper::GetCurrentWeek(string &cur_time, string &start_time){
+	// Mon Jan 13 15:16:51 2019
+	// 1/1/2019
+	string cur_month_str = "";
+	int cur_month = 0;
+	int cur_day = 0;
+	int start_day = 0;
+	int start_month = 0;
+// convert cur_time	
+	cur_month_str += cur_time[4];
+	cur_month_str += cur_time[5];
+	cur_month_str += cur_time[6];
+	cur_month = ConvertDoM(cur_month_str);
+	cur_day = 10 * (cur_time[8] != ' ') * (cur_time[8] - '0') + (cur_time[9] - '0');
+// convert start_day
+	
+	int index = 0;
+	while (index < start_time.length()) {
+		if (start_time[index] == '/') {
+			++index;
+			break;
+		}
+		start_day = start_day * 10 + start_time[index] - '0';
+		++index;
+	}
+	while (index < start_time.length()) {
+		if (start_time[index] == '/') {
+			break;
+		}
+		start_month = start_month * 10 + start_time[index] - '0';
+		++index;
+	}
+// process
+	int cnt_cur = 0;
+	int cnt_start = 0;
+	int DoM[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; // day of month
+
+	for (int i = 0; i < cur_month - 1; i++)
+		cnt_cur += DoM[i];
+	cnt_cur += cur_day;
+
+	for (int i = 0; i < start_month - 1; i++)
+		cnt_start += DoM[i];
+	cnt_start += start_day;
+	
+	return ( cnt_cur - cnt_start) / 7 + 1 ;
+}
+

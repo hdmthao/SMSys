@@ -17,7 +17,9 @@ class Courses : private Staff {
 private:
     bool ExistedCourse(const string &course_id);
     void AddNewCourseToDatabase(const string &course_id);
-
+    bool AddStudentToStudentList(int ID, string &course_id);
+    bool RemoveStudentFromStudentList(int ID, const string &course_id);
+    bool RemoveCourseFromStudentList(const string &course_id);
 public:
     Courses();
     ~Courses();

@@ -238,3 +238,42 @@ bool App::ExportAttendance(string &course_id) {
 
 	return export_status;
 }
+
+
+string App::CheckIn() {
+	string check_in_status = "";
+
+	int ID = this->user->GetStudentID();
+
+	check_in_status = Students::CheckIn(ID);
+
+	return check_in_status;
+}
+
+
+vector<Attendance> App::ViewCheckInResult() {
+	vector<Attendance> atten;
+	int ID = this->user->GetStudentID();
+
+	atten = Students::ViewCheckInResult(ID);
+
+	return atten;
+}
+
+
+vector<Schedule> App::StudentGetSchedule() {
+	vector<Schedule> schedule;
+	int ID = this->user->GetStudentID();
+	schedule = Students::GetSchedule(ID);
+
+	return schedule;
+
+}
+
+vector<Score> App::ViewScoreboard() {
+	vector<Score> scoreboard;
+	int ID = this->user->GetStudentID();
+	scoreboard = Students::ViewScore(ID);
+
+	return scoreboard;
+}

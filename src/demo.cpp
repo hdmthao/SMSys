@@ -5,7 +5,8 @@
 #include <string>
 #include <limits>
 #include <iomanip>
-
+#include <chrono>
+#include <ctime>
 using std::cerr;
 using std::cin;
 using std::cout;
@@ -106,15 +107,19 @@ void TestChangeStudent() {
 }
 
 void TestRemoveStudentFromClass() {
-	cout << "### TEST REMOVE STUDENT FROM CLASS\n";
+	cout << "[RUN] TEST REMOVE STUDENT FROM CLASS\n\n";
 	int id;
-	id = getInt("Remove ID");
+	id = getInt(">> Remove ID");
 	cout << "\n";
 	if (app->RemoveStudentFromClass(id)) {
 		cout << ">> Remove OK\n";
 	} else {
 		cout << ">> Remove FAIL\n";
 	}
+
+	cout << "[DONE] TEST REMOVE STUDENT FROM CLASS\n";
+	cout << "Press Enter";
+	cin.ignore();
 }
 
 void TestEditStudentFromClass() {
@@ -216,7 +221,7 @@ void TestImportCourse() {
 }
 
 void TestAddNewCourse() {
-	cout << "### TEST ADD NEW COURSE\n";
+	cout << "[RUN] TEST ADD NEW COURSE\n\n";
 
 	Course new_course;
 	new_course.ID = getString("Course ID");
@@ -244,10 +249,14 @@ void TestAddNewCourse() {
 	} else {
 		cout << "[X]  Add New Course FAIL\n";
 	}
+	cout << "\n";
+	cout << "[DONE] TEST ADD NEW COURSE\n";
+	cout << "Press Enter";
+	cin.ignore();
 }
 
 void TestAddStudentToCourse() {
-	cout << "### TEST ADD STUDENT TO COURSE\n";
+	cout << "[RUN] TEST ADD STUDENT TO COURSE\n";
 
 	int student_id = getInt("student id");
 	string course_id = getString("course id");
@@ -258,14 +267,16 @@ void TestAddStudentToCourse() {
 		cout << ">> Student not existed or existed in course\n";
 	}
 	cout << "\n";
-	cout << "[OK] Add Student To Course OK\n";
+	cout << "[DONE] TEST ADD STUDENT TO COURSE\n";
+	cout << "Press Enter";
+	cin.ignore();
 }
 
 void TestRemoveStudentFromCourse() {
-	cout << "TEST REMOVE STUDENT FROM COURSE\n";
+	cout << "[RUN] TEST REMOVE STUDENT FROM COURSE\n";
 
-	string course_id = getString("Coures ID");
 	int del_student = getInt("Student ID");
+	string course_id = getString("Coures ID");
 
 	if (app->RemoveStudentFromCourse(course_id, del_student)) {
 		cout << ">> Remove stunde id " << del_student << " from course " << course_id << "\n";
@@ -274,7 +285,9 @@ void TestRemoveStudentFromCourse() {
 	}
 
 	cout << "\n";
-	cout << "[OK] Remove Student From Course OK\n";
+	cout << "[DONE] TEST REMOVE STUDENT FROM COURSE\n";
+	cout << "Press Enter";
+	cin.ignore();
 }
 
 void TestViewCourseList() {
@@ -351,11 +364,11 @@ void TestViewCourseList() {
 
 
 void TestRemoveCourse() {
-	cout << "### TEST REMOVE COURSE\n";
+	cout << "[RUN] TEST REMOVE COURSE\n\n";
 
 	vector<string> course_list;
 	course_list = app->GetCourselist();
-	cout << ">> List Of Course\n";
+	cout << ">> List of course\n";
 	for (int i = 0; i < course_list.size(); ++i) {
 		cout << i + 1 << ". " << course_list[i] << "\n";
 	}
@@ -370,7 +383,9 @@ void TestRemoveCourse() {
 	}
 
 	cout << "\n";
-	cout << "[OK] REMOVE COURSE OK\n";
+	cout << "[DONE] REMOVE COURSE\n";
+	cout << "Press Enter";
+	cin.ignore();
 }
 
 
@@ -563,6 +578,168 @@ void TestExportAttendance() {
 	cin.ignore();
 }
 
+void TestCheckIn() {
+	cout << "[RUN] TEST CHECKIN\n\n";
+	cout << ">> YOU MUST LOGIN FIRST\n";
+
+	string user_name = "18126039";
+	string password = "18126039";
+
+	if (app->Login(user_name, password)) {
+		cout << ">> Login OK\n\n";
+		
+		string check_in_status = app->CheckIn();
+		cout << ">> " << check_in_status << "\n\n";
+	} else {
+		cout << ">> Login FAIL\n\n";
+	}
+
+	cout << "[DONE] TEST CHECK-IN\n";
+	cout << "Press Enter";
+	cin.ignore();
+}
+
+void TestViewCheckInResult() {
+	cout << "[RUN] TEST VIEW CHECK-IN RESULT\n\n";
+	cout << ">> YOU MUST LOGIN FIRST\n";
+
+	string user_name = "18126039";
+	string password = "18126039";
+
+	if (app->Login(user_name, password)) {
+		cout << ">> Login OK\n\n";
+
+		vector<Attendance> Attendance_list = app->ViewCheckInResult(); 
+		cout << "| " << setw(12) << left << "Course ID";
+	for (int i = 1; i <= 10; ++i) {
+		string week = "";
+		if (i <= 9) week = "Week-0" + std::to_string(i); else week = "Week-10";
+		cout << "| " << setw(10) << left << week;
+	}
+	cout << "|\n";
+	cout << setfill('-') << setw(135) << "-" << "\n";
+	cout << setfill(' ');
+	for (int i = 0; i < Attendance_list.size(); ++i) {
+		cout << "| " << setw(12) << left << Attendance_list[i].course_id;
+		for (int k = 0; k < Attendance_list[i].week.size(); k++)
+		{
+			string tmp = std::to_string(Attendance_list[i].week[k]) + "/2";
+			cout << "| " <<  setw(10) << left << tmp;
+		}
+		cout << "|\n";
+	}
+	cout << setfill('-') << setw(135) << "-" << "\n";
+	cout << setfill(' ');
+	} else {
+		cout << ">> Login FAIL\n\n";
+	}
+	cout << "\n";
+	cout << "[DONE] TEST VIEW CHECK-IN RESULT\n";
+	cout << "Press Enter";
+	cin.ignore();
+}
+
+void TestViewSchedules() {
+	cout <<"[RUN] TEST STUDENT VIEW SCHEDULE\n\n";
+	cout << ">> YOU MUST LOGIN FIRST\n";
+
+	// string user_name = getString("User Name");
+	// string password = etString("password");
+	string user_name = "18126039";
+	string password = "18126039";
+
+	if (app->Login(user_name, password)) {
+		cout << ">> Login OK!!!\n\n";
+		cout << ">> Schedule of student " << user_name << "\n\n";
+		cout << setw(7) << left << " ";
+		for (int i = 2; i <= 7; ++i) {
+			cout << "| " << setw(14) << left << i;
+		}
+		cout << "|\n";
+		vector<Schedule> schedule;
+		schedule = app->StudentGetSchedule();
+		for (int j = 1; j <= 4; ++j) {
+			cout << setfill('-') << setw(105) << "\n";
+			cout << setfill(' ') << "\n";
+			for (int i = 1; i <= 7; ++i) {
+				if (i == 1) {
+					string tmp = "Shift " + std::to_string(j);
+					cout << setw(7) << left << tmp;
+				} else {
+					bool found_period = false;
+					for (int k = 0; k < schedule.size(); ++k) {
+						if (schedule[k].dow == i && schedule[k].shift == j) {
+							string tmp  = schedule[k].course_id + "--" + schedule[k].room;
+							cout << "| " << setw(14) << left << tmp;
+							found_period = true;
+							break;
+						}
+					}
+					if (!found_period) cout <<"| " << setw(14) << left << " ";
+				}
+			}
+			cout << "|\n";
+		}
+		cout << setfill('-') << setw(105) << "\n";
+		cout << setfill(' ') << "\n";
+
+	} else {
+		cout << ">> Login FAIL\n\n";
+	}
+
+	cout << "\n";
+	cout << "[DONE] TEST STUDENT VIEW SCHEDULE\n";
+	cout << "Press Enter";
+	cin.ignore();
+}
+
+void TestViewScoresOfACourse() {
+	cout << "[RUN] TEST VIEW HIS/HER SCORES OF A COURSE\n\n";
+	cout << ">> YOU MUST LOGIN FIRST\n";
+
+	// string user_name = getString("User Name");
+	// string password = etString("password");
+	string user_name = "18126039";
+	string password = "18126039";
+	if (app->Login(user_name, password)) {
+		cout << ">> Login OK\n\n";
+		cout << ">> Scoreboard of student " << user_name << "\n\n";
+	 	vector<Score> scoreboard;
+
+		scoreboard = app->ViewScoreboard();
+
+		cout << "| " << setw(15) << left << "COURSE_ID";
+		cout << "| " << setw(10) << left << "MIDTERM";
+		cout << "| " << setw(10) << left << "LAB";
+		cout << "| " << setw(10) << left << "ABCF";
+		cout << "| " << setw(10) << left << "BONUS";
+		cout << "| " << setw(10) << left << "FINAL";
+		cout << "| " << setw(10) << left << "GPA";
+		cout << "|\n"; 
+		cout << setfill('-') << setw(87) << "";
+		cout << setfill(' ') << "\n";
+		for (int i = 0; i < scoreboard.size(); ++i) {
+			cout << "| " << setw(15) << left << scoreboard[i].course_id;
+			cout << "| " << setw(10) << left << scoreboard[i].mid_term;
+			cout << "| " << setw(10) << left << scoreboard[i].lab;
+			cout << "| " << setw(10) << left << scoreboard[i].bonus;
+			cout << "| " << setw(10) << left << scoreboard[i].final_term;
+			cout << "| " << setw(10) << left << scoreboard[i].ABCF;
+			cout << "| " << setw(10) << left << scoreboard[i].GPA;
+			cout << "|\n";
+			cout << setfill('-') << setw(87) << "";
+			cout << setfill(' ') << "\n";
+		}
+	} else {
+		cout << ">> Login FAIL\n";
+	}
+
+	cout << "\n";
+	cout << "[DONE] TEST VIEW HIS/HER SCORES OF A COURSE\n";
+	cout << "Press Enter";
+	cin.ignore();
+}
+
 void Notyet() {
 	cout << "Feature Will Coming Soon...\n";
 	cout << "Press Enter";
@@ -592,6 +769,10 @@ int main() {
 	menu.push_back(make_pair(25, "Export scoreboard"));
 	menu.push_back(make_pair(26, "Search and View Attendance of a course"));
 	menu.push_back(make_pair(27, "Export Attendance"));
+	menu.push_back(make_pair(35, "Check-in"));
+	menu.push_back(make_pair(36, "View check-in result"));
+	menu.push_back(make_pair(37, "View Schedules"));
+	menu.push_back(make_pair(38, "View his/her scores of a course"));
 
 	while (1) {
 	cout << "          DEMO SMSys\n\n";
@@ -671,6 +852,18 @@ int main() {
 			break;
 		case 27:
 			TestExportAttendance();
+			break;
+		case 35:
+			TestCheckIn();
+			break;
+		case 36:
+			TestViewCheckInResult();
+			break;
+		case 37:
+			TestViewSchedules();
+			break;
+		case 38:
+			TestViewScoresOfACourse();
 			break;
 		default:
 			Notyet();

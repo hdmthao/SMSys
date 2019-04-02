@@ -49,6 +49,13 @@ bool User::Login(const string &userName, const string &passWord) {
 	return false;
 }
 
+int User::GetStudentID() {
+	// if (this->account->role != UserRole::STUDENT) {
+	// 	return 0;
+	// }
+	return this->account->ID;
+}
+
 
 bool User::Logout() {
 	if (!this->isAuthenticated) return false;

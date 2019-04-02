@@ -66,7 +66,7 @@ bool Courses::ImportCourse(const string &csv_name) {
 
     new_course.ID = Helper::StringToUpper(new_course.ID);
 
-    const string COURSE_ID = new_course.ID;
+    string COURSE_ID = new_course.ID;
     const string path_to_course_dir = Path::COURSE + COURSE_ID;
     const string path_to_course = path_to_course_dir + "/course_info.txt";
 
@@ -115,6 +115,7 @@ bool Courses::ImportCourse(const string &csv_name) {
             fo << id << " " << first_name << " "<< last_name << " " << line << "\n";
             fo_score << id << " " << first_name << " " << last_name << " " << "0 0 0 0 NULL 0\n";
             fo_attendance << id << " " << first_name << " " << last_name << " " << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
+            AddStudentToStudentList(std::stoi(id), COURSE_ID);
         }
         fo.close();
         fo_score.close();
@@ -171,7 +172,8 @@ bool Courses::AddNewCourse(Course &new_course, string &class_name, int number_pe
             getline(fi, last_name, ' ');
             getline(fi, line);
             fo << id << " " << first_name << " "<< last_name << " " << line << "\n";
-            fo_score << id << " " << first_name << " " << last_name << " " << "0 0 0 0 NULL 0\n"; 
+            fo_score << id << " " << first_name << " " << last_name << " " << "0 0 0 0 NULL 0\n";
+            AddStudentToStudentList(std::stoi(id), new_course.ID);
         }
         fo.close();
         fo_score.close();
@@ -187,7 +189,7 @@ bool Courses::AddStudentToCourse(const string & course_id, const int student_id)
         return false;
     }
 
-    const string COURSE_ID = Helper::StringToUpper(course_id);
+    string COURSE_ID = Helper::StringToUpper(course_id);
 	Student NewStudent = GetStudent(student_id);
 	string SBoardPath = Path::COURSE + COURSE_ID + "/scoreboard.txt";
 	string SInfoPath = Path::COURSE + COURSE_ID + "/student_info.txt";
@@ -216,6 +218,7 @@ bool Courses::AddStudentToCourse(const string & course_id, const int student_id)
 	fout.open(SInfoPath, ios::app);
 	fout << NewStudent.ID << " " << NewStudent.first_name << " " << NewStudent.last_name << " " << NewStudent.gender << " " << NewStudent.dob << " " << NewStudent.email << "\n";
 	fout.close();
+    AddStudentToStudentList(NewStudent.ID, COURSE_ID);
 	return true;
 }
 
@@ -317,6 +320,8 @@ bool Courses::RemoveStudentFromCourse(const string & course_id, const int del_st
     }
     fout.close();
     AttenList.clear();
+
+    RemoveStudentFromStudentList(del_student, COURSE_ID);
     return true;
 }
 
@@ -341,6 +346,7 @@ bool Courses::RemoveCourse(string &course_id) {
 
     Helper::RemoveDir(course_id);
 
+    RemoveCourseFromStudentList(course_id);
     return true;
 }
 
@@ -455,7 +461,7 @@ bool Courses::ExportAttendance(string &course_id) {
     while (fi >> id) {
         fi >> first_name >> last_name;
         Helper::ConvertStringToSpace(last_name);
-        fo <<count << "," << id << "," << last_name;
+        fo <<count << "," << id << "," << last_name << "," << first_name;
         string x;
         int cnt = 0;
         for (int i = 1; i <= 10; ++i) {
@@ -474,3 +480,111 @@ bool Courses::ExportAttendance(string &course_id) {
     return true;
 }
 
+
+bool Courses::AddStudentToStudentList(int ID, string &course_id) {
+    bool is_exist = false;
+
+    ifstream fi(Path::STUDENTS_LIST);
+
+    int tmp_id, tmp_count;
+    string tmp_course;
+    while (fi >> tmp_id) {
+        fi >> tmp_count;
+        for (int i = 0; i < tmp_count; ++i) {
+            fi >> tmp_course;
+        }
+        if (tmp_id == ID) {
+            is_exist = true;
+            break;
+        }
+    }
+    fi.close();
+    if (is_exist) {
+        vector<string> list;
+        fi.open(Path::STUDENTS_LIST);
+        while (fi >> tmp_id) {
+            fi >> tmp_count;
+            int tmp_tmp_count = tmp_count;
+            if (ID == tmp_id) tmp_count++;
+            string line = std::to_string(tmp_id) + " " + std::to_string(tmp_count);
+            for (int i = 0; i < tmp_tmp_count; ++i) {
+                fi >> tmp_course;
+                line += " " + tmp_course;
+            }
+            if (tmp_id == ID) {
+                line += " " + course_id;
+            }
+            list.push_back(line);
+        }
+        ofstream fo(Path::STUDENTS_LIST);
+
+        for (int i = 0; i < list.size(); ++i) {
+            fo << list[i] << "\n";
+        }
+        fo.close();
+        list.clear();
+    } else {
+        ofstream fo(Path::STUDENTS_LIST, ios::app);
+        fo << ID << " " << 1 << " " << course_id << "\n";
+        fo.close();
+    }
+    return true;
+}
+
+bool Courses::RemoveStudentFromStudentList(int ID, const string &course_id) {
+    vector<string> list;
+    
+    ifstream fi(Path::STUDENTS_LIST);
+    int tmp_id, tmp_count;
+    string tmp_course;
+    cout << course_id << " ";
+    while (fi >> tmp_id) {
+        fi >> tmp_count;
+        int tmp_tmp_count = tmp_count;
+        if (ID == tmp_id) tmp_count--;
+        string line = std::to_string(tmp_id) + " " + std::to_string(tmp_count);
+        for (int i = 0; i < tmp_tmp_count; ++i) {
+            fi >> tmp_course;
+            if (ID != tmp_id || tmp_course != course_id) line += " " + tmp_course;
+        }
+        list.push_back(line);
+    }
+    
+    ofstream fo(Path::STUDENTS_LIST);
+
+    for (int i = 0; i < list.size(); ++i) {
+        fo << list[i] << "\n";
+    }
+    fo.close();
+    list.clear();
+    return true;
+}
+
+
+bool Courses::RemoveCourseFromStudentList(const string &course_id) {
+    vector<string> list;
+    
+    ifstream fi(Path::STUDENTS_LIST);
+    int tmp_id, tmp_count;
+    string tmp_course;
+    while (fi >> tmp_id) {
+        fi >> tmp_count;
+        int tmp_tmp_count = tmp_count;
+        string line = "";
+        for (int i = 0; i < tmp_tmp_count; ++i) {
+            fi >> tmp_course;
+            if (tmp_course != course_id) line += " " + tmp_course; else tmp_count--;
+        }
+        list.push_back(std::to_string(tmp_id) + " " + std::to_string(tmp_count) + line);
+    }
+    
+    ofstream fo(Path::STUDENTS_LIST);
+
+    for (int i = 0; i < list.size(); ++i) {
+        fo << list[i] << "\n";
+    }
+    fo.close();
+    list.clear();
+    return true;
+
+}

@@ -24,6 +24,7 @@ public:
 	bool FirstTimeLogin(void);
 	bool ResetPassword(const string &oldPassword, const string &newPassword);
 	void DeleteAccount(const int &id);
+	int GetStudentID();
 };
 
 #endif // 

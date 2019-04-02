@@ -8,6 +8,7 @@ using std::vector;
 
 struct Attendance {
 	int ID;
+	string course_id;
 	string first_name;
 	string last_name;
 	vector<int> week;
