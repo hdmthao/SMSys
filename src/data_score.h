@@ -16,6 +16,9 @@ struct Score {
     float final_term;
     string ABCF;
     float GPA;
+
+    Score() : ID(0), course_id(""), first_name(""), last_name(""), mid_term(0), lab(0), bonus(0), final_term(0), ABCF(""), GPA(0) { }
+
 };
 
 #endif

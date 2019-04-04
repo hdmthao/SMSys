@@ -1,2 +1,4 @@
-dbtien@hcmus 1 CS162
-nhanh@hcmus 1 MTH252
+nhanh 1 MTH252
+nnthu 1 CTH001
+dbtien 1 CS162
+dnvu 0

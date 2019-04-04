@@ -81,8 +81,8 @@ bool Lecturers::EditGrade(string &course_id, Score &a) {
 				score.final_term = a.final_term;
 				score.lab = a.lab;
 				score.bonus = a.bonus;
-				score.ABCF = a.ABCF;
-				score.GPA = a.GPA;
+				score.GPA = (score.mid_term * 0.3 + score.bonus * 0.1 + score.lab * 0.2 + score.final_term * 0.4);
+				score.ABCF = 'A' + (score.GPA < 8.5) + (score.GPA < 7.0) + (score.GPA < 5.5) + (score.GPA < 4.0);				
 			}
 			ScoreBoard.push_back(score);
 		}
@@ -103,6 +103,10 @@ bool Lecturers::EditGrade(string &course_id, Score &a) {
 	ScoreBoard.clear();
 	out.close();
 	return true;
+
+    			// 	ScoB[i].GPA = (ScoB[i].mid_term * 0.3 + ScoB[i].bonus * 0.1 + ScoB[i].lab * 0.2 + ScoB[i].final_term * 0.4);
+				// ScoB[i].ABCF = 'A' + (ScoB[i].GPA < 8.5) + (ScoB[i].GPA < 7.0) + (ScoB[i].GPA < 5.5) + (ScoB[i].GPA < 4.0);				
+
 }
 
 void Lecturers::AddNewCourse(string &lecturer_name, string &course_id) {
@@ -181,7 +185,7 @@ void Lecturers::RemoveCourse(string &course_id) {
     list.clear();
 }
 
-void Lecturers::CreateAccountForLecturer(const int &id, string &user_name, string &password){
+void Lecturers::CreateAccountForLecturer(string &user_name, string &password){
     
     ifstream fi(Path::ACCOUNT);
     int no, role, tmp;
@@ -195,7 +199,116 @@ void Lecturers::CreateAccountForLecturer(const int &id, string &user_name, strin
     }
     fi.close();
     ofstream fo(Path::ACCOUNT, ios::app);
-	fo << id << " " << user_name << " " << Generator::generatePassword(password) <<
+	fo << 11111111 << " " << user_name << " " << Generator::generatePassword(password) <<
                  " " << UserRole::LECTURER << " " << 1 << "\n"; // firsttime is true
     fo.close();
+}
+
+bool Lecturers::ImportScoreboard(string &course_id, string &csv_file){
+	string csv_path = Path::IMPORT_SCORE + csv_file; // change here
+	string txt_path = Path::COURSE + course_id + "/scoreboard.txt"; // change here
+
+	// get from .txt
+
+	vector <Score> ScoB;
+	Score tmp;
+	ifstream in;
+	in.open(txt_path);
+	while (in >> tmp.ID >> tmp.first_name >> tmp.last_name >> tmp.mid_term >> tmp.lab >> tmp.bonus >> tmp.final_term >> tmp.ABCF >> tmp.GPA) {
+		ScoB.push_back(tmp);
+	}
+	in.close();
+	
+	// get from .csv
+	
+	string data;
+	in.open(csv_path);
+	in >> data; // first line - not using
+ 
+	while (in >> data) { 
+		Score convert_data;
+		int space_count = 0;
+		bool after_point = 0;
+		//convert
+		for (int i = 0; i < data.length(); i++) {
+			if (data[i] == ',') {
+				after_point = 0;
+				++space_count;
+				continue;
+			}
+			if (space_count == 0) {
+				convert_data.ID = convert_data.ID * 10 + (data[i] - '0');
+			}
+			if (space_count == 1) {
+				if (data[i] == '.')
+					after_point = 1;
+				else
+					if (!after_point)
+						convert_data.mid_term = convert_data.mid_term * 10 + (data[i] - '0');
+					else
+						convert_data.mid_term = convert_data.mid_term + 0.1 * (data[i] - '0');
+			}
+			if (space_count == 2) {
+				if (data[i] == '.')
+					after_point = 1;
+				else
+					if (!after_point)
+						convert_data.lab = convert_data.lab * 10 + (data[i] - '0');
+					else
+						convert_data.lab = convert_data.lab + 0.1 * (data[i] - '0');
+			}
+			if (space_count == 3) {
+				if (data[i] == '.')
+					after_point = 1;
+				else
+					if (!after_point)
+						convert_data.bonus = convert_data.bonus * 10 + (data[i] - '0');
+					else
+						convert_data.bonus = convert_data.bonus + 0.1 * (data[i] - '0');
+			}
+			if (space_count == 4) {
+				if (data[i] == '.')
+					after_point = 1;
+				else
+					if (!after_point)
+						convert_data.final_term = convert_data.final_term * 10 + (data[i] - '0');
+					else
+						convert_data.final_term = convert_data.final_term + 0.1 * (data[i] - '0');
+			}
+
+		}
+		//cout << convert_data.ID << " " << convert_data.mid_term << " " << convert_data.lab << " " << convert_data.bonus << " " << convert_data.final_term << "\n";
+		for (int i = 0; i < ScoB.size(); i++) {
+			if (ScoB[i].ID == convert_data.ID) {
+				ScoB[i].mid_term = convert_data.mid_term;
+				ScoB[i].lab = convert_data.lab;
+				ScoB[i].bonus = convert_data.bonus;
+				ScoB[i].final_term = convert_data.final_term;
+				ScoB[i].GPA = (ScoB[i].mid_term * 0.3 + ScoB[i].bonus * 0.1 + ScoB[i].lab * 0.2 + ScoB[i].final_term * 0.4);
+				ScoB[i].ABCF = 'A' + (ScoB[i].GPA < 8.5) + (ScoB[i].GPA < 7.0) + (ScoB[i].GPA < 5.5) + (ScoB[i].GPA < 4.0);				
+			}
+		}
+	}
+	in.close();
+
+	// rewrite to .txt
+
+	ofstream out;
+	out.open(txt_path);
+	for (int i = 0; i < ScoB.size(); i++) {
+		out << ScoB[i].ID << " " << ScoB[i].first_name << " " << ScoB[i].last_name << " " << ScoB[i].mid_term << " " << ScoB[i].lab << " " << ScoB[i].bonus << " " << ScoB[i].final_term << " " << ScoB[i].ABCF << " " << ScoB[i].GPA << "\n";
+	}
+	out.close();
+
+	return true;
+}
+
+
+vector<string> Lecturers::GetCsvForScore() {
+    vector<string> list;
+
+    string path = Path::IMPORT_SCORE;
+    Helper::GetFileInFolder(list, path);
+
+    return list;
 }

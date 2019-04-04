@@ -1,0 +1,9 @@
+18127001 Anh Pham-Ky Male 4/8/2000 pkAnh18@apcs.vn
+18127004 Hien Nguyen-Vu-Thu Female 7/12/2000 nvtHien18@apcs.vn
+18127046 Lien Lu-Ngoc Female 31/5/2000 lnLien18@apcs.vn
+18127053 Thao Ngoc-Thi-Thanh Female 14/1/2000 nttThao18@apcs.vn
+18127054 Thinh Le-Nguyen Male 10/10/2000 lnThinh18@apcs.vn
+18127068 Chau Bui-Nguyen-Minh Female 11/7/2000 bnmChau18@apcs.vn
+18127069 Chau Vo-Minh Male 18/6/2000 vmChau18@apcs.vn
+18127077 Dat Nguyen-Thanh Male 5/3/1997 ntDat18@apcs.vn
+18127094 Ha Trinh-Quang Male 7/3/2000 tqHa18@apcs.vn

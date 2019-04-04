@@ -53,7 +53,7 @@ bool Courses::ImportCourse(const string &csv_name) {
         getline(fi, room);
         period_1.room = room;
     }
-    if (number_period == "2") {\
+    if (number_period == "2") {
         getline(fi, room, ',');
         period_1.room = room;
         getline(fi, dow, ',');
@@ -125,7 +125,7 @@ bool Courses::ImportCourse(const string &csv_name) {
     fi.close();
 
     Lecturers::AddNewCourse(new_course.lecturer, new_course.ID);
-    Lecturers::CreateAccountForLecturer(1111111111, new_course.lecturer, new_course.lecturer);
+    Lecturers::CreateAccountForLecturer(new_course.lecturer, new_course.lecturer);
     return true;
 }
 
@@ -156,18 +156,22 @@ bool Courses::AddNewCourse(Course &new_course, string &class_name, int number_pe
     
     // Save Schedule
     fo.open(path_to_course_dir + "/schedule.txt");
+
     fo << number_period << "\n";
     fo << period_1.dow << " " << period_1.shift << " " << period_1.room;
     if (number_period == 2) {
         fo << "\n";
         fo << period_2.dow << " " << period_2.shift << " " << period_2.room;
     }
+    
+    fo.close();
 
     // Save info student && init scoreboard
     ifstream fi(Path::CLASS + class_name + "/student.txt");
     if (fi.is_open()) {
         fo.open(path_to_course_dir + "/student_info.txt");
         ofstream fo_score(path_to_course_dir + "/scoreboard.txt");
+        ofstream fo_attendance(path_to_course_dir + "/attendance.txt");
         string id, first_name, last_name, line;
         while (!fi.eof()) {
             getline(fi, id, ' ');
@@ -177,6 +181,7 @@ bool Courses::AddNewCourse(Course &new_course, string &class_name, int number_pe
             getline(fi, line);
             fo << id << " " << first_name << " "<< last_name << " " << line << "\n";
             fo_score << id << " " << first_name << " " << last_name << " " << "0 0 0 0 NULL 0\n";
+            fo_attendance << id << " " << first_name << " " << last_name << " " << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
             AddStudentToStudentList(std::stoi(id), new_course.ID);
         }
         fo.close();
@@ -185,49 +190,10 @@ bool Courses::AddNewCourse(Course &new_course, string &class_name, int number_pe
     fi.close();
 
     Lecturers::AddNewCourse(new_course.lecturer, new_course.ID);
-    Lecturers::CreateAccountForLecturer(1111111111, new_course.lecturer, new_course.lecturer);
+    Lecturers::CreateAccountForLecturer(new_course.lecturer, new_course.lecturer);
     return true;
 }
 
-
-bool Courses::AddStudentToCourse(const string & course_id, const int student_id) {
-    // Check student existed in class
-    if (!IsExistedStudent(student_id)) {
-        return false;
-    }
-
-    string COURSE_ID = Helper::StringToUpper(course_id);
-	Student NewStudent = GetStudent(student_id);
-	string SBoardPath = Path::COURSE + COURSE_ID + "/scoreboard.txt";
-	string SInfoPath = Path::COURSE + COURSE_ID + "/student_info.txt";
-	
-    // Check studnet existed in course
-    ifstream fi(SInfoPath);
-    Student tmp_student;
-    while (fi >> tmp_student.ID >> tmp_student.first_name >> tmp_student.last_name >> tmp_student.gender >> 
-            tmp_student.dob >> tmp_student.email) {
-                if (tmp_student.ID == student_id) {
-                    fi.close();
-                    return false;
-                }
-            }
-    fi.close();
-	ofstream fout;
-    // Add to Score Board, scoreboard.txt
-	fout.open(SBoardPath, ios::app);
-	fout << NewStudent.ID << " " << NewStudent.first_name << " " << NewStudent.last_name << " 0 0 0 0 NULL 0\n";
-	fout.close();
-    // Add to Attendance, attendace.txt
-    fout.open(Path::COURSE + COURSE_ID + "/attendance.txt", ios::app);
-    fout << NewStudent.ID << " " << NewStudent.first_name << " " << NewStudent.last_name << " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
-    fout.close(); 
-    // Add to Student List, student_info.txt
-	fout.open(SInfoPath, ios::app);
-	fout << NewStudent.ID << " " << NewStudent.first_name << " " << NewStudent.last_name << " " << NewStudent.gender << " " << NewStudent.dob << " " << NewStudent.email << "\n";
-	fout.close();
-    AddStudentToStudentList(NewStudent.ID, COURSE_ID);
-	return true;
-}
 
 bool Courses::EditCourse(Course &course) {
     Helper::UpperFirstCharOfLetter(course.name);
@@ -242,6 +208,32 @@ bool Courses::EditCourse(Course &course) {
     fo << course.ID << " " << course.name << " " << course.lecturer << " " << course.start_date << " " << course.end_date;
     
     fo.close();
+    return true;
+}
+
+
+bool Courses::RemoveCourse(string &course_id) {
+    course_id = Helper::StringToUpper(course_id);
+
+    if (!ExistedCourse(course_id)) {
+        return false;
+    }
+
+    vector<string> course_list = GetCourseList();
+
+    ofstream fo(Path::COURSES_LIST);
+    for (int i = 0; i < course_list.size(); ++i) {
+        if (course_list[i] != course_id) {
+            fo << course_list[i] << "\n";
+        }
+    }
+    fo.close();
+    course_list.clear();
+
+    Helper::RemoveDir(course_id);
+
+    RemoveCourseFromStudentList(course_id);
+    Lecturers::RemoveCourse(course_id);
     return true;
 }
 
@@ -332,30 +324,45 @@ bool Courses::RemoveStudentFromCourse(const string & course_id, const int del_st
     return true;
 }
 
+bool Courses::AddStudentToCourse(const string & course_id, const int student_id) {
 
-bool Courses::RemoveCourse(string &course_id) {
-    course_id = Helper::StringToUpper(course_id);
-
-    if (!ExistedCourse(course_id)) {
+    string COURSE_ID = Helper::StringToUpper(course_id);
+	Student NewStudent;
+    
+    bool exist_student = GetStudent(student_id, NewStudent);
+    if (!exist_student) {
         return false;
     }
 
-    vector<string> course_list = GetCourselist();
-
-    ofstream fo(Path::COURSES_LIST);
-    for (int i = 0; i < course_list.size(); ++i) {
-        if (course_list[i] != course_id) {
-            fo << course_list[i] << "\n";
-        }
-    }
-    fo.close();
-    course_list.clear();
-
-    Helper::RemoveDir(course_id);
-
-    RemoveCourseFromStudentList(course_id);
-    Lecturers::RemoveCourse(course_id);
-    return true;
+	string SBoardPath = Path::COURSE + COURSE_ID + "/scoreboard.txt";
+	string SInfoPath = Path::COURSE + COURSE_ID + "/student_info.txt";
+	
+    // Check studnet existed in course
+    ifstream fi(SInfoPath);
+    Student tmp_student;
+    while (fi >> tmp_student.ID >> tmp_student.first_name >> tmp_student.last_name >> tmp_student.gender >> 
+            tmp_student.dob >> tmp_student.email) {
+                if (tmp_student.ID == student_id) {
+                    fi.close();
+                    return false;
+                }
+            }
+    fi.close();
+	ofstream fout;
+    // Add to Score Board, scoreboard.txt
+	fout.open(SBoardPath, ios::app);
+	fout << NewStudent.ID << " " << NewStudent.first_name << " " << NewStudent.last_name << " 0 0 0 0 NULL 0\n";
+	fout.close();
+    // Add to Attendance, attendace.txt
+    fout.open(Path::COURSE + COURSE_ID + "/attendance.txt", ios::app);
+    fout << NewStudent.ID << " " << NewStudent.first_name << " " << NewStudent.last_name << " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
+    fout.close(); 
+    // Add to Student List, student_info.txt
+	fout.open(SInfoPath, ios::app);
+	fout << NewStudent.ID << " " << NewStudent.first_name << " " << NewStudent.last_name << " " << NewStudent.gender << " " << NewStudent.dob << " " << NewStudent.email << "\n";
+	fout.close();
+    AddStudentToStudentList(NewStudent.ID, COURSE_ID);
+	return true;
 }
 
 
@@ -382,6 +389,20 @@ void Courses::AddNewCourseToDatabase(const string &course_id) {
     fo << course_id << "\n";
 
     fo.close();
+}
+
+
+vector<string> Courses::GetCourseList() {
+	vector<string> courses;
+	ifstream fin(Path::COURSES_LIST);
+	string course_name;
+	if (fin.is_open()) {
+		while (fin >> course_name) {
+			courses.push_back(course_name);
+		}
+	}
+	fin.close();
+	return courses;
 }
 
 
@@ -487,6 +508,7 @@ bool Courses::ExportAttendance(string &course_id) {
     fo.close();
     return true;
 }
+
 
 
 bool Courses::AddStudentToStudentList(int ID, string &course_id) {

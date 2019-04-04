@@ -46,7 +46,7 @@ string Generator::generateEmail(const string &lastName, const string &firstName)
 	for (int i = 0; i < first_name.length(); ++i) {
 		if (first_name[i] >= 'A' && first_name[i] <= 'Z') first_name[i] = first_name[i] - 'A' + 'a';
 	}
-	first_name[0] = first_name[0] - 'a' + 'A';
-	result += firstName + "18@apcs.vn";
+	first_name[0] = first_name[0];
+	result += first_name + "18@apcs.vn";
 	return result;
 }

@@ -25,6 +25,9 @@ public:
     static const string IMPORT_COURSE;
     static const string EXPORT;
     static const string LECTURER;
+    
+    // Score
+    static const string IMPORT_SCORE;
 };
 
 #endif

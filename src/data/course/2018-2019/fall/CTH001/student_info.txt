@@ -1,0 +1,10 @@
+18126002 Trang Nguyen-Thanh Female 18/12/200 ntTrang18@apcs.vn
+18126015 Han Nguyen-Thi-Ngoc Female 18/1/200 ntnHan18@apcs.vn
+18126018 Khan Pham-Nguyen-Nhat Male 29/4/200 pnnKhan18@apcs.vn
+18126021 Khoa Do-Minh Male 24/10/200 dmKhoa18@apcs.vn
+18126025 Minh Nguyen-Nhat Male 14/3/200 nnMinh18@apcs.vn
+18126033 Thi Le-Thi-Anh Female 20/3/200 ltaThi18@apcs.vn
+18126035 Trung Dinh-Viet Male 2/6/199 dvTrung18@apcs.vn
+18126036 Uyen Phan-Binh-Duy Female 24/1/200 pbdUyen18@apcs.vn
+18126040 Xuan Nguyen-Thi Female 25/10/200 ntXuan18@apcs.vn
+18125006 Dung Pham-Le-Thuy Female 2/4/2000 pltDung18@apcs.vn

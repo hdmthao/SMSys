@@ -16,7 +16,9 @@ public:
     static void AddNewCourse(string &lecturer_name, string &course_id);
     static void RemoveCourse(string &course_id);
     static vector<string> GetCoursesList(string &name);
-    static void CreateAccountForLecturer(const int &ID, string &user_name, string &password);
+    static void CreateAccountForLecturer(string &user_name, string &password);
+    static bool ImportScoreboard(string &course_id, string &csv_file);
+    static vector<string> GetCsvForScore();
 };
 
 #endif

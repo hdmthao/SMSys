@@ -17,23 +17,30 @@ class App {
 private:
 	User* user;
 	Staff* staff;
-	Courses* courses;
 
 public:
 	App();
 	~App();
 
+	// Init staff account
+	void CreateAccount(string &user_name, string &password);
+	
 	// All User
 	bool Login(string userName, string passWord);
 	bool Logout();
+	UserRole GetUserRole();
+	Profile GetProfile();
+	bool IsAuthenticated();
+	bool IsFirstTimeLogin();
+	bool ChangePassword(string &old_password, string &new_password, string &again_password);
 
 	// Staff -> Class
-	bool ImportClass(const string &class_name, const string &csv_name);
+	bool ImportClass(string &class_name, const string &csv_name);
 	bool AddNewStudentToClass(const string &class_name, Student &new_student);
-	bool ChangeStudentFromClassAToB(const int &id, string &class_b);
-	bool RemoveStudentFromClass(const int &ID);
 	bool EditStudentFromClass(Student &student);
-	Student GetStudent(const int &id);
+	bool RemoveStudentFromClass(const int &ID);
+	bool ChangeStudentFromClassAToB(const int &id, string &class_b);
+	bool GetStudent(const int &id, Student &student);
 	vector<string> GetClassList();
 	vector<Student> GetStudentListFromClass(string &class_name);
 	vector<string> GetCsvForClass();
@@ -47,7 +54,8 @@ public:
 	Course GetCourseInfo(string &course_id);
 	bool RemoveStudentFromCourse(const string &course_id, int student_id);
 	bool RemoveCourse(string &course_id);
-	vector<string> GetCourselist();
+	vector<string> GetCourseList();
+	static vector<string> GetCourseListOfStudent(int &id);
 	vector<Student> GetStudentListFromCourse(string &course_name);
 	vector<Attendance> GetAttendanceList(string &course_name);
 	vector<string> SearchCourse(string &find_id);
@@ -57,9 +65,11 @@ public:
 	// Lecturer
 	vector<string> LecturerGetCoursesList();
 	bool LecturerEditAttendance(int ID, string &course_id, int week, int count);
-	vector<Score> LecturerGetScoreboard(string &course_id);
+	vector<Score> Getscoreboard(string &course_id);
 	bool LecturerEditGrade(string &course_id, Score &score);
-
+	vector<string> GetCsvForScore();
+	bool ImportScore(string &course_id, string &csv_name);
+	
 	// Student
 	string StudentCheckIn();
 	vector<Attendance> StudentViewCheckInResult();

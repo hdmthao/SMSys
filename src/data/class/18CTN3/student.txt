@@ -1,0 +1,10 @@
+18120109 An Doan-Van-Thanh Male 1/7/200 dvtAn18@apcs.vn
+18120111 Bao Tran-Quoc Male 6/3/200 tqBao18@apcs.vn
+18120112 Bao Truong-Nhat-Nguyen Male 23/1/200 tnnBao18@apcs.vn
+18120142 Nhi Pham-Thai-Ngoc Female 15/11/200 ptnNhi18@apcs.vn
+18120144 Phuc Nguyen-Dinh-Thien Male 13/6/200 ndtPhuc18@apcs.vn
+18120151 Tue Vu-Gia Male 11/8/200 vgTue18@apcs.vn
+18120332 Dung Nguyen-Dang-Tien Male 20/3/200 ndtDung18@apcs.vn
+18120338 Duy Cao-Minh Male 2/10/200 cmDuy18@apcs.vn
+18120508 Phu Ding-Phong Male 6/6/200 dpPhu18@apcs.vn
+18120558 Thang Vo-Xuan-Duc Male 4/1/200 vxdThang18@apcs.vn
