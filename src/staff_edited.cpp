@@ -183,10 +183,76 @@ bool Staff::EditStudentFromClass(Student &student){
 		out << studentList[i].ID << " " << studentList[i].first_name << " " << studentList[i].last_name << " " << studentList[i].gender << " " << studentList[i].dob << " " << studentList[i].email << "\n";
 	}
 	studentList.clear();
+	out.close();
+
+	// Edit From Course (UPDATE)
+	// get list of courses
+	string course_id;
+	vector <string> course_list;
+	in.open(Path::COURSES_LIST);
+	while (in >> course_id) {
+		course_list.push_back(course_id);
+	}
+	in.close();
+	// edit data
+	while (!course_list.empty()) {
+		// edit attendance
+		in.open(Path::COURSE + course_list.back() + "/attendance.txt");
+		Attendance tmp_attend;
+		vector <Attendance> attend_list;
+		while (in >> tmp_attend.ID >> tmp_attend.first_name >> tmp_attend.last_name) {
+			int week_attend = 0;
+			for (int i = 0; i < 20; i++) {
+				in >> week_attend;
+				tmp_attend.week.push_back(week_attend);
+			}
+			if (tmp_attend.ID == student.ID) {
+				tmp_attend.first_name = student.first_name;
+				tmp_attend.last_name = student.last_name;
+			}
+			attend_list.push_back(tmp_attend);
+		}
+		in.close();
+		// edit scoreboard
+
+		in.open(Path::COURSE + course_list.back() + "/scoreboard.txt");
+		Score tmp_score;
+		vector <Score> score_list;	
+		while (in >> tmp_score.ID >> tmp_score.first_name >> tmp_score.last_name >> tmp_score.mid_term >> tmp_score.lab >> tmp_score.bonus >> tmp_score.final_term >> tmp_score.ABCF >> tmp_score.GPA)	{
+			if (tmp_score.ID == student.ID) {
+				tmp_score.first_name = student.first_name;
+				tmp_score.last_name = student.last_name;
+			}
+			score_list.push_back(tmp_score);
+		}
+		in.close();
+
+		// rewrite attend
+
+		out.open(Path::COURSE + course_list.back() + "/attendance.txt");
+		for (int i = 0; i < attend_list.size(); i++) {
+			out << attend_list[i].ID << " " << attend_list[i].first_name << " " << attend_list[i].last_name << " ";
+			for (int j = 0; j < 20; j++) {
+				cout << attend_list[i].week[j] << " ";
+			}
+			cout << "\n";
+		}
+		attend_list.clear();
+		out.close();
+
+		// rewrite scoreboard
+		out.open(Path::COURSE + course_list.back() + "/scoreboard.txt");
+		for (int i = 0; i < score_list.size(); i++) {
+			out << score_list[i].ID << " " << score_list[i].first_name << " " << score_list[i].last_name << " " << score_list[i].mid_term << " " << score_list[i].lab << " " << score_list[i].bonus << " " << score_list[i].final_term << " " << score_list[i].ABCF << " " << score_list[i].GPA << "\n";
+		}
+		score_list.clear();
+		out.close();
+
+	}
+
 
     // Edit info in course that student were enroll
 
-	out.close();
 	return true;
 }
 
